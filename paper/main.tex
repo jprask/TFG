@@ -1,0 +1,252 @@
+\documentclass[12pt]{article}
+
+\usepackage{sbc-template}
+
+\usepackage{graphicx,url}
+
+\usepackage[brazil]{babel}   
+\usepackage[utf8]{inputenc}  
+
+\usepackage[autostyle]{csquotes}  
+     
+\sloppy
+
+\title{Sistema de Recomendação de Trabalhos Cientificos e Autores}
+
+\author{João Pedro R. D. Saldanha\inst{1}, Fernando Prass\inst{1}}
+
+
+\address{Ciência da Computação -- Universidade Franciscana (UFN)\\
+  Rua dos Andradas, 1614  -- 97010-032  -- Santa Maria -- RS -- Brasil
+\email{\{joao.pedro,fernando.prass\}@ufn.edu.br}
+}
+
+\begin{document} 
+
+\maketitle
+
+\begin{abstract}
+  This meta-paper describes the style to be used in articles and short papers
+  for SBC conferences. For papers in English, you should add just an abstract
+  while for the papers in Portuguese, we also ask for an abstract in
+  Portuguese (``resumo''). In both cases, abstracts should not have more than
+  10 lines and must be in the first page of the paper.
+\end{abstract}
+     
+\begin{resumo} 
+  Este meta-artigo descreve o estilo a ser usado na confecção de artigos e
+  resumos de artigos para publicação nos anais das conferências organizadas
+  pela SBC. É solicitada a escrita de resumo e abstract apenas para os artigos
+  escritos em português. Artigos em inglês deverão apresentar apenas abstract.
+  Nos dois casos, o autor deve tomar cuidado para que o resumo (e o abstract)
+  não ultrapassem 10 linhas cada, sendo que ambos devem estar na primeira
+  página do artigo.
+\end{resumo}
+
+
+\section{Introdução}
+
+No método científico, pesquisadores devem realizar um trabalho criativo sistemático para incrementar 
+o conhecimento na área da pesquisa. Parte fundamental do processo é a busca, dentro do universo dos 
+trabalhos científicos, por embasamento teórico ao tema do trabalho proposto. Além disto, também é 
+importante conhecer e colaborar com pesquisadores desenvolvendo trabalhos relacionados dentro da 
+área de pesquisa.  Portanto, é preciso reunir todas as informações pertinentes, pesquisas e resultados 
+anteriores bem como linhas de pesquisa em progresso para não reinventar a roda ou seguir caminhos já 
+trilhados e assim realizar trabalho relevante e produtivo.
+
+A plataforma Lattes é um sistema que integra bases de dados de currículos, em específico de pesquisadores. 
+Ela oferece aos usuários a possibilidade de criar um currículo de maneira gratuita, que é disponibilizado 
+abertamente aos visitantes do site. Segundo \cite{CNPq2019lattes}, o Currículo Lattes 
+\textit{"se tornou um padrão nacional no registro da vida pregressa e atual dos estudantes e 
+pesquisadores do país, e é hoje adotado pela maioria das instituições de fomento, universidades e 
+institutos de pesquisa do País"}.
+    
+O universo da pesquisa científica está em constante expansão, tanto no que diz respeito ao conhecimento 
+produzido quanto ao volume de trabalhos e publicações. Estimativas apontavam um valor em torno de 2.5 
+milhões de artigos científicos publicados por ano, em 2015, com um aumento de 5\% ao ano no número de 
+cientistas fazendo publicações \cite{ware2015stm}. Pesquisadores não têm o tempo necessário para analisar 
+todos os estudos relacionados à seus próprios trabalhos, mesmo com plataformas como o Lattes, onde estão 
+tais trabalhos estão compilados. Trata-se do problema da sobrecarga de informação, que tem crescido na 
+medida em que sistemas digitais vem ganhando cada vez usuários e conteúdo. Outro problema decorrente do 
+crescimento do número de pesquisadores e trabalhos é que muitas vezes os pesquisadores não conhecem outros 
+pesquisadores da área e acabam por perder a oportunidade de colaborações ou troca de idéias.
+
+Logo, se faz necessário a filtragem da informação que chega ao pesquisador para maximizar sua eficiência e 
+evitar tempo perdido. A automatização de tal tarefa de filtragem pode ser feita através de sistemas de recomendação, 
+utilizando técnicas de mineração de dados e inteligência artificial para oferecer o conteúdo mais relevante 
+disponível, aumentando a eficiência do acadêmico. 
+
+A partir do problema da sobrecarga de informações, nos anos 90 iniciou-se a pesquisa na área de filtragem de conteúdo. 
+O ponto de partida foi a observação que as pessoas usam, no dia-a-dia, dicas de outros para tomar decisões, sendo que 
+as dicas daqueles tidos como especialistas no assunto tem um peso diferenciado. Os primeiros sistemas de recomendação 
+eram algoritmos capazes de analizar tendências dentro de uma certa comunidade e então fazer sugestões aos seus membros. 
+Este método é conhecido como filtragem colaborativa e foi aprimorado desde então, sendo até hoje bastante popular. Além 
+deste, também é bastante difundido o método baseado em conteúdo, no qual novos itens são recomendados baseado no 
+conteúdo consumido pelo usuário no passado \cite{ricci2011introduction}.
+
+\section{Objetivos}
+
+Neste trabalho é proposta a elaboração de um sistema de recomendações de pesquisadores e trabalhos científicos baseado 
+em um banco de dados com informações da plataforma lattes. O sistema deve analisar o perfil dos pesquisadores e então 
+fazer sugestões de conteúdo relevante e pesquisadores com o perfil semelhante. Para tal, deve-se:
+
+\begin{itemize}
+    \item Estudar funções e aplicações de sistemas de recomendação
+    \item Escolher uma técnica para ser aplicada
+    \item Planejar a Implementação do Sistema de Recomendações
+    \item Implementar o Sistema De Recomendações
+    \item Avaliar o modelo
+\end{itemize}
+
+\section{Revisão Bibliográfica}
+
+Nesta seção, será feita a apresentação dos principais itens que compõem o  embasamento teórico usado como ponto de 
+partida no trabalho e usado para justificar as decisões tomadas.
+
+\subsection{Sistemas de Recomendação}
+
+Frequentemente usuários de plataformas digitais se deparam com situações nas quais é necessário escolher entre 
+vários itens ofertados: Produtos, conteúdo ou pessoas. A dificuldade de filtrar o conteúdo encontrado em determinada 
+plataforma tende a aumentar na medida em que o número de itens ofertados cresce, visto que é necessário fazer uma 
+análise individual de tais itens e então compará-los para fazer uma escolha. Para ajudar na tarefa, é comum encontrar 
+sistemas que automatizam o processo de escolha, filtrando o conteúdo com base no perfil do usuário para apresentar 
+seu interesse. Tais sistemas são especificamente úteis quando um usuário encontra dificuldades para analisar os itens 
+ofertados e fazer escolhas. Os itens recomendados pelos SR podem ser os mais variados, sendo que no geral a recomendação 
+é uma tarefa especializada, ou seja, apenas um tipo de item é recomendado, e a recomendação é relevante para um perfil 
+específico de usuário. Logo, as características do SR, como metodologia usada para sua construção, interface de usuário 
+e critério para ordenar os resultados devem ser adaptados às especificidades da tarefa em questão. 
+
+A forma mais simples do resultado de um SR é uma lista de itens ordenada de acordo com a preferência do usuário. A satisfação 
+com as recomendações pode ser coletada explicitamente, como por exemplo através de avaliações, ou implicitamente através de 
+inferências baseadas no comportamento do usuário perante aos itens oferecidos. Para oferecer recomendações, é preciso analisar 
+uma base de conhecimento, que pode ter diversas informações, realizar um trabalho de classificação dos itens ofertados e 
+então coletar algum tipo de feedback perante o resultado que deve ser usado para aprimorar o sistema \cite{ricci2011introduction}.
+
+\subsubsection{Técnicas de Recomendação}
+
+O resultado obtido por um SR é dependente da realização de uma \textbf{predição}. A predição é fundamental para a qualidade 
+das recomendações: Itens são apresentados ao usuário porque  o sistema antecipa que sejam relevantes para ele 
+\cite{ricci2011introduction}. Geralmente na elaboração de sistemas de recomendação lidamos com \textbf{usuários}, denotados por 
+$ u_1, ... u_n \in U $, \textbf{itens}, denotados por $ i_1, ... i_n \in I$  e \textbf{relações}, que associam usuários e 
+itens de diversas maneiras \cite{ekstrand2019recommender}. As associações podem ser representadas por ontologias 
+\cite{primo2006tecnicas} ou no caso de relações entre usuários e itens através de uma matriz de associação $ |U| \times |I| $. 
+Assume-se a existência no mundo real de uma \textbf{função} $ f (u, i) $ que retorne um número real representado a utilidade do 
+item $i$ ao usuário $u$. Em técnicas de filtragem colaborativa, este numero é visto como a avaliação do usuário. A tarefa do SR 
+neste contexto é computar uma função $\hat{f}(u, i)$ que se assemelhe ao máximo à $f$. 
+Assim, é possível realizar a predição de relevância de um grupo de itens para determinado usuário $\hat{f}(u_n, I)$ e recomendar 
+os itens melhores classificados pelo SR, efetivamente filtrando o conteúdo e oferecendo ao usuário uma seleção personalizada de 
+itens \cite{ricci2011introduction}.
+
+\subsubsection{Filtragem Colaborativa}
+
+Técnicas de filtragem colaborativa analisam o \textbf{perfil} do usuário e sua \textbf{avaliação} dos itens previamente 
+acessados para chegar em recomendações. Procura-se analisar o perfil do \textbf{usuário alvo} para então achar um \textit{cluster} 
+de usuários com perfis similares (\textbf{vizinhos}). A idéia é que os itens bem avaliados pelos vizinhos serão também 
+avaliados positivamente pelo usuário alvo, já que os perfis são semelhantes. Um problema encontrado na técnica é o problema 
+da primeira avaliação: Quando temos um item novo, sem nenhuma avaliação, como saber se determinado usuário irá avaliar 
+positivamente o item? Nenhum de seus vizinhos fez avaliações \cite{ricci2011introduction}.
+
+SRs baseados em filtragem colaborativa são os mais populares na área e vêm sido pesquisados há mais tempo. \cite{ricci2011introduction} 
+É comum utilizar métodos baseados em vizinhança, nos quais um algoritmo de clusterização é usado para determinar grupos 
+de usuários ou ítens, tal como o algoritmo \textbf{KNN} (\textit{K-Nearest Neighbours}) \cite{da2018desenvolvimento}.
+
+\subsubsection{Método Baseado em Conteúdo}
+
+O método baseado em conteúdo parte da idéia de que usuários têm interesse em itens semelhantes àqueles que lhe foram ùteis 
+no passado \cite{ricci2011introduction}. No caso, é importante determinar a \textbf{semelhança entre itens} para então recomendar 
+para determinado usuário itens semelhantes aos que foram \textbf{previamente bem avaliados} por ele. Nesse método, 
+é preciso estabelecer estratégias para descrever itens bem como para montar o perfil dos usuários, descrevendo os tipos 
+de itens que ele tem interesse em. Então, deve ser feito o \textbf{comparativo} dos itens com o perfil do usuário para 
+predizer seu interesse em tais itens. Geralmente procura-se dividir o universo dos itens, $I$, em categorias: Relevantes ou 
+irrelevantes ao usuário, por exemplo. Para  construir a classificação dos itens, é possível usar uma série de algoritmos que 
+realizam trabalho de \textbf{classificação estatística}, como por exemplo \textbf{árvores de decisão} \cite{pazzani2007content}. 
+
+\subsubsection{Método Baseado em Confiança}
+
+Estudos indicam que os usuários têm a tendência de \textbf{valorizar mais as recomendações de amigos} do que aquelas feitas 
+por outros usuários com perfil semelhante, porém desconhecidos. A qualidade das recomendações de amigos superam inclusive 
+as feitas por sistemas de recomendação \cite{sinha2001comparing}. A partir deste conceito, com a grande aderência de usuários 
+à \textbf{redes sociais} um novo método para a construção de sistemas de recomendação está sendo estudado. Trata-se do método 
+baseado em confiança, ou sistema de recomendação social (\textit{social recommender system}) \cite{ricci2011introduction}.
+
+A construção de SRs sociais depende do estabelecimento de uma \textbf{rede de confiança}, ou seja, uma rede social que descreve 
+o nível de confiança entre seus membros. Assim, o usuário recebe recomendações de itens avaliados positivamente por usuários 
+em sua rede de confiança. Estes SRs precisam usar o conceito de \textbf{agregação e dissipação de confiança}, ou seja, 
+dados um grupo de usuários $u_1  \dots u_n$, calcular o nível de confiança entre $u_1$ e $u_n$ considerando usuários intermediários
+$u_2 \dots u_{n-1}$ que possuem alguma relação de confiança, direta ou indireta, com $u_1$ e $u_n$ (\textbf{dissipação}) ou 
+combinar uma série de estimativas de confiança em um valor final (\textbf{agregação}) \cite{victor2011trust}.
+
+Um ponto fraco de tais sistemas é mais previsível e pode facilmente ser inundada por itens que o usuário já conhece, enquanto 
+técnicas mais usuais de recomendação podem apresentar resultados mais inesperados, mas relevantes ao usuário \cite{sinha2001comparing}.
+
+\subsection{Trabalhos Correlatos}
+
+Os trabalhos correlatos foram escolhidos utilizando como critério a contemporaneidade e semelhança com o presente trabalho, 
+de forma a trazer um embasamento atualizado das metodologias usadas para a resolução de problemas semelhantes.
+
+\subsubsection{Desenvolvimento de um Sistema de Recomendação para Bibliotecas Digitais}
+
+Este trabalho também aborda o problema da sobrecarga de informações dos pesquisadores baseando-se no perfil do currículo lattes. 
+O trabalho busca recomendações de produções científicas utilizando o motor de buscas google acadêmico e traz uma combinação 
+das técnicas de filtragem colaborativa e baseado em conhecimento. A metodologia para gerar recomendações utilizada neste 
+trabalho será usada no presente trabalho como referência para a elaboração do SR, levando em consideração os pontos fracos 
+e fortes da abordagem descrita no trabalho. Em particular, será considerada a maneira com que o trabalho propôs solucionar 
+o problema  da avaliação inicial de um SR de filtragem colaborativa através do método baseado em conteúdo \cite{da2018desenvolvimento}.
+
+\subsubsection{Técnicas de Recomendação para usuários de Bibliotecas
+Digitais}
+
+Trabalho que apresenta algumas das mais populares técnicas de recomendação, bem como a justificativa e contexto para a 
+correta implementação dos mesmos. O trabalho descreve diversas abordagens para a elaboração de um SR de obras literárias 
+em bibliotecas digitais, usando as técnicas de filtragem colaborativa e baseado em conteúdo bem como uma abordagem híbrida. 
+O contexto do sistema de recomendação descrito no trabalho se assemelha ao do presente trabalho por ter como alvo uma 
+biblioteca digital, sendo que as obras literárias da biblioteca podem ser comparadas aos artigos encontrados na plataforma 
+lattes. O comparativo das metodologias usadas serve como referência para a elaboração do SR descrito no presente trabalho. 
+As relações entre usuário e items (no caso, obras literárias) é descrita através de uma ontologia na qual conceitos são 
+definidos pelos termos que os definem e organizados em uma hierarquia. A ontologia serve para descrever as relações entre 
+item e usuário e serve como referência para a modelagem das relações do SR desenvolvido neste trabalho. O trabalho também 
+apresenta um experimento para ilustrar a importância da opinião de especialistas \cite{primo2006tecnicas}.
+
+%\section{Figures and Captions}\label{sec:figs}
+
+
+%Figure and table captions should be centered if less than one line
+%(Figure~\ref{fig:exampleFig1}), otherwise justified and indented by %0.8cm on
+%both margins, as shown in Figure~\ref{fig:exampleFig2}. The caption font must
+%be Helvetica, 10 point, boldface, with 6 points of space before and after each
+%caption.
+
+%\begin{figure}[ht]
+%\centering
+%\includegraphics[width=.5\textwidth]{fig1.jpg}
+%\caption{A typical figure}
+%\label{fig:exampleFig1}
+%\end{figure}
+
+%\begin{figure}[ht]
+%\centering
+%\includegraphics[width=.3\textwidth]{fig2.jpg}
+%caption{This figure is an example of a figure caption taking more than one
+%  line and justified considering margins mentioned in Section~\ref{sec:figs}.}
+%\label{fig:exampleFig2}
+%\end{figure}
+
+%In tables, try to avoid the use of colored or shaded backgrounds, and avoid
+%thick, doubled, or unnecessary framing lines. When reporting empirical data,
+%do not use more decimal digits than warranted by their precision and
+%reproducibility. Table caption must be placed before the table (see Table 1)
+%and the font used must also be Helvetica, 10 point, boldface, with 6 points of
+%space before and after each caption.
+
+%\begin{table}[ht]
+%\centering
+%\caption{Variables to be considered on the evaluation of interaction
+%  techniques}
+%label{tab:exTable1}
+%\includegraphics[width=.7\textwidth]{table.jpg}
+%\end{table}
+
+\bibliographystyle{sbc}
+\bibliography{sbc-template}
+
+\end{document}
