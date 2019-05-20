@@ -218,13 +218,14 @@ apresenta um experimento para ilustrar a importância da opinião de especialist
 
 \section{Materiais \& Métodos}
 
-Para chegar nas recomendações, é proposto um trabalho em dois momentos: Estimar a confiança da comunidade em cada pesquisador 
-e então selecionar publicações baseando-se no perfil dos pesquisadores. A seleção será ordenada de acordo com o nìvel de  
-confiança estimado das publicações. O primeiro passo é modelar uma \textbf{rede de confiança} da comunidade científica, 
-descrita por autores e publicações. Pode então ser feita uma seleção das publicações cadastradas com base no perfil do usuário 
-e ordenar a seleção de acordo com o nível de confiança de cada item. Em termos de ferramentas para implementação, foi escolhida 
-a linguagem python, que possui riqueza de ferramentas e recursos para trabalhos relacionados a manipulação de dados e computação 
-numérica.% \cite{python book}
+Para chegar nas recomendações, é proposto um trabalho em dois momentos: Estimar a confiança entre pesquisadores e então
+selecionar publicações baseando-se no perfil dos pesquisadores. A seleção será ordenada de acordo com o nìvel de  confiança
+estimado das publicações. O primeiro passo é modelar uma rede de confiança da comunidade científica, descrita por autores 
+e publicações. Pode então ser feita uma seleção das publicações cadastradas com base no perfil do usuário e ordenar a seleção
+de acordo com o nível de confiança de cada item. A confiança pode ser local ou global, sendo que local diz respeito à 
+confiança estimada de um pesquisador específico em seus colegas e a global corresponde à a confiança da comunidade em cada 
+pesquisador.Em termos de ferramentas para implementação, foi escolhida a linguagem python, que possui riqueza de ferramentas 
+e recursos para trabalhos relacionados a manipulação de dados e computação numérica .% \cite{python book}
 
 \subsection{Os Dados da Plataforma Lattes}
 
@@ -247,7 +248,7 @@ introdução de novos dados e fatos. Em alguns casos é possível inferir a \tex
 ser regional, nacional ou internacional. Algumas tuplas podem também conter a \textbf{natureza}, que deve ser vista como o 
 nível de cobertura do assunto discutido alcançado pelo trabalho: Completo, resumo e assim por diante. A ordem dos nomes dos 
 autores geralmente é indicativo da importância do autor para a publicação: O \textbf{autor principal} geralmente é o primeiro 
-nome, e o \textbf{orientador} do trabalho o último. Entre eles, os colaboradores \textbf{intermedários}.  
+nome, e o \textbf{orientador} do trabalho o último. Entre eles, os colaboradores \textbf{intermediários}.  
 
 \subsubsection{Pesquisadores}
 
@@ -262,17 +263,19 @@ exemplo doutorado ou mestrado.
 
 Pode-se pensar na rede de confiança como sendo um grafo no qual os nodos são pesquisadores e as arestas publicações em conjunto. 
 Considerando que uma colaboração em publicações é um voto de confiança entre os pesquisadores envolvidos, a matriz de adjacência 
-pode ser usada para computar a propagação de confiança através da rede. A confiança da comunidade em uma determinada publicação 
-é a soma da confiança investida pela comunidade em cada pesquisador envolvido no trabalho. O algoritmo PageRank foi inspirado em 
-parte em estudos realizados em redes de citações acadêmicas, nas quais a relevância de um artigo era descrita por contagem de 
-citações, por exemplo \cite{page1999pagerank}. Aqui, a proposta é um algoritmo capaz de empregar a engenhosidade da contagem de 
-citações de PageRank na computação de confiança. Fica definido como escore de confiança de um autor a estimativa de confiança 
-investida nele pela comunidade, conforme será descrito a seguir.
+pode ser usada para computar a propagação de confiança através da rede. A confiança estimada de determinada publicação é a soma 
+da confiança estimada de cada pesquisador envolvido no trabalho. 
 
-Perceba que a rede de confiança da comunidade acadêmica gera uma matriz simétrica, que seria propensa ao problema do 
-\textit{rank sink} e que o conceito de um \textit{random surfer} não faz sentido pois não se trata de um modelo de navegação em  
-páginas da \textit{web}. Portanto, a proposta é a introdução de heurísticas capazes de aperfeiçoar a aplicação do algoritmo, 
-adaptando o problema ao modelo proposto: Propagação de confiança em uma rede de colaborações. 
+O algoritmo PageRank foi inspirado em parte em estudos realizados em redes de citações acadêmicas, nas quais a relevância de um 
+artigo era descrita por contagem de citações, por exemplo \cite{page1999pagerank}. Trata-se de um método para computar um ranking 
+global de citações. Aqui, a proposta é um algoritmo capaz de empregar a engenhosidade da contagem de citações de PageRank na 
+computação de confiança. Perceba que a rede de confiança da comunidade acadêmica gera uma matriz simétrica: Um voto de confiança 
+através de colaboração em publicações é mútuo entre os autores, logo, há propensão ao problema do \textit{rank sink} e que o 
+conceito de um \textit{random surfer} não faz sentido pois não se trata de um modelo de navegação em  páginas da \textit{web}. 
+Portanto, a proposta é a introdução de heurísticas capazes de aperfeiçoar a aplicação do algoritmo, adaptando o problema ao 
+modelo proposto: Propagação de confiança em uma rede de colaborações. 
+
+~~ Paragrafo sobre computar confiança local
 
 \subsubsection{Relevância}
 
@@ -285,6 +288,18 @@ considerada conforme a tabela.
 
 \subsubsection{Expertise}
 
+Expertise é o conceito de quanto conhecimento determinado pesquisador possui em sua área de atuação. Para estabelecer uma 
+heurística de expertise, é usado um modelo semelhante ao usado para estimar a relevância de  um artigo: Para cada ponto 
+considerado relevante à expertise do autor, é atribuído um valor e então a heurística é o somatório dos valores dos campos 
+que possuem dados.
+
+** tabela **
+
+\subsubsection{PageRank Heurístico}
+
+\subsubsection{Segunda métrica de propagação  de confiança (local)}
+
+\subsubsection{Validação}
 
 %\section{Figures and Captions}\label{sec:figs}
 
