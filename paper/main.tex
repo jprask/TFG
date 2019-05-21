@@ -224,8 +224,8 @@ estimado das publicações. O primeiro passo é modelar uma rede de confiança d
 e publicações. Pode então ser feita uma seleção das publicações cadastradas com base no perfil do usuário e ordenar a seleção
 de acordo com o nível de confiança de cada item. A confiança pode ser local ou global, sendo que local diz respeito à 
 confiança estimada de um pesquisador específico em seus colegas e a global corresponde à a confiança da comunidade em cada 
-pesquisador.Em termos de ferramentas para implementação, foi escolhida a linguagem python, que possui riqueza de ferramentas 
-e recursos para trabalhos relacionados a manipulação de dados e computação numérica .% \cite{python book}
+pesquisador. Em termos de ferramentas para implementação, foi escolhida a linguagem python, que possui riqueza de ferramentas 
+e recursos para trabalhos relacionados a manipulação de dados e computação numérica.% \cite{python book}
 
 \subsection{Os Dados da Plataforma Lattes}
 
@@ -261,21 +261,32 @@ exemplo doutorado ou mestrado.
 
 \subsection{Computando confiança}
 
-Pode-se pensar na rede de confiança como sendo um grafo no qual os nodos são pesquisadores e as arestas publicações em conjunto. 
+Pode-se pensar na rede de confiança como sendo um grafo no qual os nodos são pesquisadores e as arestas publicações em conjunto.
 Considerando que uma colaboração em publicações é um voto de confiança entre os pesquisadores envolvidos, a matriz de adjacência 
 pode ser usada para computar a propagação de confiança através da rede. A confiança estimada de determinada publicação é a soma 
 da confiança estimada de cada pesquisador envolvido no trabalho. 
 
 O algoritmo PageRank foi inspirado em parte em estudos realizados em redes de citações acadêmicas, nas quais a relevância de um 
-artigo era descrita por contagem de citações, por exemplo \cite{page1999pagerank}. Trata-se de um método para computar um ranking 
-global de citações. Aqui, a proposta é um algoritmo capaz de empregar a engenhosidade da contagem de citações de PageRank na 
-computação de confiança. Perceba que a rede de confiança da comunidade acadêmica gera uma matriz simétrica: Um voto de confiança 
-através de colaboração em publicações é mútuo entre os autores, logo, há propensão ao problema do \textit{rank sink} e que o 
-conceito de um \textit{random surfer} não faz sentido pois não se trata de um modelo de navegação em  páginas da \textit{web}. 
-Portanto, a proposta é a introdução de heurísticas capazes de aperfeiçoar a aplicação do algoritmo, adaptando o problema ao 
-modelo proposto: Propagação de confiança em uma rede de colaborações. 
+artigo era descrita por contagem de citações, por exemplo. Trata-se de um método para computar um ranking global de citações, 
+pensado para computar a importancia das paginas web. O ranking $R$ de uma página é definido como a soma dos rankings das páginas 
+que oferecem links para ela. É definido para cada página $u$ um conjunto $F_u$ de páginas as quais $u$ referencia e um conjunto 
+$B_u$ de páginas que fazem referência à $u$. Considerando uma matriz de adjacência $A_{u,v}$ na qual o valor é $1/N_u$ nas 
+posições onde há referência de $u$ para $v$, PageRank pode ser definido como $R = c(AR + E)$, sendo $c$ um fator de normalização.
+\cite{page1999pagerank}
 
-\textbf{Paragrafo sobre computar confiança local}
+Quando ocorrem ciclos no fluxo de referência, nos quais duas páginas se referenciam mutuamente e não fazem referência a nenhuma 
+outra página, pode ocorrer o chamado \textit{rank sink} quando há referencias exteriores injetando  ranking no ciclo, assim as 
+páginas do ciclo acumulam ranking, porém não há distribuição. Para solucionar, foi introduzido o vetor $E$, que no modelo de 
+PageRank é o conceito de um \textit{random surfer}, ou seja, uma probabilidade de um usuário da internet aleatoriamente mudar a 
+página, sem seguir nenhum de seus links. \cite{page1999pagerank}
+
+A aplicação de PageRank à um grafo não-direcionado gera um vetor $R$ estatisticamente similar à distribuição de grau dos nodos 
+da rede \cite{perra2008spectral}. Isto é, aplicando diretamente o algoritmo ao problema proposto, no final das contas a confiança 
+seria aproximadamente igual ao número de colaborações (publicações em conjunto). Enquanto esta métrica é relevante, perde-se a 
+idéia inicial: Não é considerada a confiança dos colaboradores, somente o valor total de colaborações. Além disso, alguns conceitos 
+importantes não são levados em consideração: A relevância da publicação e a expertise dos acadêmicos. No caso da \textbf{relevância}, 
+a importância da publicação é uma dica para o nível  de confiança mútua entre os pesquisadores. Já o nível de \textbf{expertise} 
+do pesquisador é indicativo da qualidade de seu julgamento.
 
 \subsubsection{Relevância}
 
