@@ -331,7 +331,7 @@ se encaixa particularmente bem no problema proposto por incorporar simultaneamen
 A formula proposta faz isso definindo um parâmetro $\alpha$ para ajustar a importância de grau e força:
 
 \begin{center} 
-$ C_D ^{w \alpha} (i) = k_i \times \left( \frac {s_i} {k_i} \right) ^{\alpha} = k_i ^{1 - \alpha} \times s _i ^{\alpha} $
+  $ C_D ^{w \alpha} (i) = k_i \times \left( \frac {s_i} {k_i} \right) ^{\alpha} = k_i ^{1 - \alpha} \times s _i ^{\alpha} $
 \end{center}
 
 Ao incorporar a expertise dos autores e a relevância das publicações como um peso para as arestas da rede, é reintroduzido o 
@@ -340,11 +340,35 @@ publicações em  conjunto para o cálculo da confiança estimada de tal autor. 
 apurado levando em conta informações sobre obras e autores que são relevantes para considerar a confiança compartilhada entre 
 os membros da rede.
 
-\subsubsection{Segunda métrica de propagação  de confiança (local)}
+\subsubsection{Confiança subjetiva}
 
-\textbf{Explicar o algoritmo para computar a cofiança local (alternativa ao pagerank)}
+Uma alternativa ao método descrito acima é transformar a rede de confiança em um grafo direcionado. Pode-se chegar nesse objetivo 
+gerando uma rede de confiança para cada pesquisador ao qual se deseja fazer recomendações. Com essa técnica, a aplicação direta 
+de PageRank à rede de confiança pode gerar um resultado significativo.
 
-\subsubsection{Algoritmo baseado em conteudo}
+Sejam $F$ e $B$ conjuntos de colaboradores, conforme definido em PageRank, $G_{u}^{0}$ o usuário alvo $u$ e $B_{u}^{0}$ também o 
+usuário $u$. O conjunto dos colaboradores diretos de $u$, aqueles com os quais $u$ possui publicações em conjunto, são definidos 
+como $G_{u}^{1}$ e os colaboradores dos colaboradores de $u$ são o conjunto $G_{u}^{v}$. Pode-se generalizar os colaboradores 
+de grau $n (n \geq 1)$ como o seguinte:
+
+\begin{center}
+  $ G_{u}^{n} = v | v \in F_{G_{u}^{n}}, v \notin B_{G_{u}^{n-1, n-2 ... 0}} $
+\end{center}
+
+Assim, $F_{G_{u}^{n}}$ e $B_{G_{u}^{n-1, n-2 ... 0}}$ ambos  representam um grupo de pesquisadores que publicaram obras em conjunto 
+com os pesquisadores do conjunto $G_{u}^{n}$, considerado um voto de  confiança. A diferença é que os pesquisadores do conjunto 
+$B_{G_u^{n-1, n-2 ... 0}}$ já apareceram na rede de confiança de $u$.
+
+Pode-se a partir dessa definição escrever uma função capaz de estabelecer recursivamente a rede de confiança relativa de 
+determinado pesquisador, iterando sobre os pesquisadores envolvidos  em colaborações diretas até que $ G^{n}_{u} $ seja um 
+conjunto vazio. Vale notar que embora essa técnica seja consideravelmente mais pesada em termos de computação quando o objetivo 
+é calcular a confiança relativa para todos os pesquisadores do sistema, o algoritmo PageRank converge rapidamente mesmo para 
+grandes quantidades de páginas \cite{page1999pagerank}.
+
+Nesse caso, é computada a confiança local, ou seja, a confiança estimada de cada pesquisador em relação aos outros pesquisadores, 
+e não a confiança estimada da comunidade como um todo em cada pesquisador.
+
+\subsection{Selecionando recomendações}
 
 \textbf{Apos computar a confiança, apliar um algoritmo baseado em conteudo simples para selecionar artigos para recomendação.
 a seleção será ordenada conforme a confiança.}
