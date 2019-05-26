@@ -268,13 +268,23 @@ Considerando que uma colaboração em publicações é um voto de confiança ent
 pode ser usada para computar a propagação de confiança através da rede. A confiança estimada de determinada publicação é a soma 
 da confiança estimada de cada pesquisador envolvido no trabalho. 
 
-O algoritmo PageRank foi inspirado em parte em estudos realizados em redes de citações acadêmicas, nas quais a relevância de um 
-artigo era descrita por contagem de citações, por exemplo. Trata-se de um método para computar um ranking global de citações, 
-pensado para computar a importancia das paginas web. O ranking $R$ de uma página é definido como a soma dos rankings das páginas 
-que oferecem links para ela, ponderados pelo número total de links saindo das páginas. É definido para cada página $u$ um conjunto 
-$F_u$ de páginas as quais $u$ referencia e um conjunto $B_u$ de páginas que fazem referência à $u$. Considerando uma matriz de 
-adjacência $A_{u,v}$ na qual o valor é $^1/_{N_u}$ nas posições onde há referência de $u$ para $v$, sendo $N_u$ a soma de links 
-saindo de $u$. PageRank pode ser definido como $R = c(AR + E)$, sendo $c$ um fator de normalização \cite{page1999pagerank}.
+O algoritmo PageRank foi inspirado em parte por estudos realizados em redes de citações acadêmicas, nas quais a relevância de um 
+artigo era descrita por contagem de citações, por exemplo \cite{page1999pagerank}. Trata-se de um método para computar um ranking 
+global de citações, pensado para computar a importância das paginas web. O ranking $R$ de uma página é definido como a soma dos 
+rankings das páginas que oferecem links para ela, ponderada pelo total de links encontrados nas páginas \cite{page1999pagerank}.
+
+É definido para cada página $u$ um conjunto $F_u$ de páginas as quais $u$ referencia e um conjunto $B_u$ de páginas que fazem 
+referência à $u$. Sendo $\hat{A}$ a matriz de adjacência da web, tal que 
+
+\[ \hat{A}_{i,j} =
+  \begin{cases}
+    1       & \quad \text{se } \text{ há links de i para j}\\
+    0       & \quad \text{se } \text{ não há links de i para j}
+  \end{cases}
+\]
+
+A matriz $A$ deve ser obtida dividindo todas as linhas de $\hat{A}$ por $|F_u|$ (o grau do nodo $u$). Assim, PageRank pode ser definido 
+como $R = c(AR + E)$, sendo $c$ um fator de normalização.
 
 Quando ocorrem ciclos no fluxo de referência, nos quais duas páginas se referenciam mutuamente e não fazem referência a nenhuma 
 outra página, pode ocorrer o chamado \textit{rank sink} quando há referencias exteriores injetando  ranking no ciclo, assim as 
@@ -318,7 +328,7 @@ consideração na distribuição de confiança.
 Várias métricas foram propostas na literatura para o cálculo da centralidade, em especial a proposta em \cite{opsahl2010node} 
 se encaixa particularmente bem no problema proposto por incorporar simultaneamente o grau (número de conexões) e a força 
 (os pesos de cada conexão) dos nodos. Aqui, o peso pode ser uma combinação da expertise dos autores com a relevância da obra. 
-Os autores fazem isso definindo um parâmetro $\alpha$ para ajustar a importância de grau e força:
+A formula proposta faz isso definindo um parâmetro $\alpha$ para ajustar a importância de grau e força:
 
 \begin{center} 
 $ C_D ^{w \alpha} (i) = k_i \times \left( \frac {s_i} {k_i} \right) ^{\alpha} = k_i ^{1 - \alpha} \times s _i ^{\alpha} $
@@ -327,7 +337,8 @@ $ C_D ^{w \alpha} (i) = k_i \times \left( \frac {s_i} {k_i} \right) ^{\alpha} = 
 Ao incorporar a expertise dos autores e a relevância das publicações como um peso para as arestas da rede, é reintroduzido o 
 conceito de considerar a confiança da comunidade nos colaboradores que depositaram confiança em determinado autor através de 
 publicações em  conjunto para o cálculo da confiança estimada de tal autor. Assim, é possível chegar em um fluxo de confiança 
-apurado.
+apurado levando em conta informações sobre obras e autores que são relevantes para considerar a confiança compartilhada entre 
+os membros da rede.
 
 \subsubsection{Segunda métrica de propagação  de confiança (local)}
 
@@ -338,7 +349,7 @@ apurado.
 \textbf{Apos computar a confiança, apliar um algoritmo baseado em conteudo simples para selecionar artigos para recomendação.
 a seleção será ordenada conforme a confiança.}
 
-\subsubsection{Validação}
+\subsection{Validação}
 
 %\section{Figures and Captions}\label{sec:figs}
 
