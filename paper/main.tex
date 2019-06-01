@@ -236,7 +236,7 @@ descrita a seguir.
 
 \subsubsection{Publicações}
 
-Uma publicação científica é uma produção de alguma \textbf{natureza} (artigo, livro, trabalho) que passou por um processo de 
+Uma publicação científica é uma produção de algum \textbf{tipo} (artigo, livro, trabalho) que passou por um processo de 
 revisão por pares e foi aceito como sendo uma contribuição válida, de autoria de um ou mais pesquisadores. A maioria das 
 publicações da base de conhecimento possuem alguma \textbf{palavra-chave}, informada pelos autores, que servem como uma pista 
 dos assuntos abordados. As publicações são feitas originalmente em um \textbf{idioma} e \textbf{país} específicos e 
@@ -299,11 +299,18 @@ do pesquisador é indicativo da qualidade de seu julgamento.
 \subsubsection{Relevância}
 
 Nem todas as publicações são feitas iguais. É possível considerar as características descritas na representação de publicação 
-usada na base de conhecimento para construir uma heurśtica sobre a relevância da publicação. Um valor é atribuído a cada uma 
-das características relevantes da publicação, quando presentes e a heurística é a soma das pontuações. A pontuação  é 
-considerada conforme a tabela.
+usada na base de conhecimento para construir uma heurśtica sobre a relevância da publicação. Pesos podem ser atribuidos para os 
+atributos contidos na tabela publicação. Aqui, a heurística considerada é a natureza da publicação, com pesos atribuidos conforme 
+a tabela \ref{tab:relavancy}.
 
-\textbf{** tabela **}
+\begin{center}
+  \begin{table}[ht]
+    \centering
+    \caption{Heurśtica de Relevância}
+    \label{tab:relavancy}
+    \includegraphics[width=.5\textwidth]{heuristics.png}
+    \end{table}
+\end{center}
 
 \subsubsection{Centralidade}
 
@@ -326,6 +333,8 @@ conceito de considerar a confiança da comunidade nos colaboradores que deposita
 publicações em  conjunto para o cálculo da confiança estimada de tal autor. Assim, é possível chegar em um fluxo de confiança 
 apurado levando em conta informações sobre obras e autores que são relevantes para considerar a confiança compartilhada entre 
 os membros da rede.
+
+\subsubsection{Distância}
 
 \subsubsection{Confiança subjetiva}
 
