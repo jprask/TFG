@@ -212,10 +212,6 @@ definidos pelos termos que os definem e organizados em uma hierarquia. A ontolog
 item e usuário e serve como referência para a modelagem das relações do SR desenvolvido neste trabalho. O trabalho também 
 apresenta um experimento para ilustrar a importância da opinião de especialistas \cite{primo2006tecnicas}.
 
-\subsubsection{The PageRank Citation Ranking: Bringing Order to the Web}
-
-\cite{page1999pagerank}
-
 \subsubsection{Trust-aware Collaborative Filtering for Recommender Systems}
 
 \section{Materiais \& Métodos}
@@ -309,15 +305,6 @@ considerada conforme a tabela.
 
 \textbf{** tabela **}
 
-\subsubsection{Expertise}
-
-Expertise é o conceito de quanto conhecimento determinado pesquisador possui em sua área de atuação. Para estabelecer uma 
-heurística de expertise, é usado um modelo semelhante ao usado para estimar a relevância de  um artigo: Para cada ponto 
-considerado relevante à expertise do autor, é atribuído um valor e então a heurística é o somatório dos valores dos campos 
-que possuem dados.
-
-\textbf{** tabela **}
-
 \subsubsection{Centralidade}
 
 Considerando as heurísticas definidas, é possível alcançar um fluxo de confiança mais interessante na rede modelada. O conceito 
@@ -352,12 +339,12 @@ como $G_{u}^{1}$ e os colaboradores dos colaboradores de $u$ são o conjunto $G_
 de grau $n (n \geq 1)$ como o seguinte:
 
 \begin{center}
-  $ G_{u}^{n} = v | v \in F_{G_{u}^{n}}, v \notin B_{G_{u}^{n-1, n-2 ... 0}} $
+  $ G_{u}^{n} = v | v \in F_{G_{u}^{n}}, v \notin B_{G_{u}^{n-1, n-2 \dots 0}} $
 \end{center}
 
-Assim, $F_{G_{u}^{n}}$ e $B_{G_{u}^{n-1, n-2 ... 0}}$ ambos  representam um grupo de pesquisadores que publicaram obras em conjunto 
+Assim, $F_{G_{u}^{n}}$ e $B_{G_{u}^{n-1, n-2 \dots 0}}$ ambos  representam um grupo de pesquisadores que publicaram obras em conjunto 
 com os pesquisadores do conjunto $G_{u}^{n}$, considerado um voto de  confiança. A diferença é que os pesquisadores do conjunto 
-$B_{G_u^{n-1, n-2 ... 0}}$ já apareceram na rede de confiança de $u$.
+$B_{G_u^{n-1, n-2 \dots 0}}$ já apareceram na rede de confiança de $u$.
 
 Pode-se a partir dessa definição escrever uma função capaz de estabelecer recursivamente a rede de confiança relativa de 
 determinado pesquisador, iterando sobre os pesquisadores envolvidos  em colaborações diretas até que $ G^{n}_{u} $ seja um 
@@ -368,10 +355,34 @@ grandes quantidades de páginas \cite{page1999pagerank}.
 Nesse caso, é computada a confiança local, ou seja, a confiança estimada de cada pesquisador em relação aos outros pesquisadores, 
 e não a confiança estimada da comunidade como um todo em cada pesquisador.
 
-\subsection{Selecionando recomendações}
+\subsection{Pré-seleção de Recomendações}
 
-\textbf{Apos computar a confiança, apliar um algoritmo baseado em conteudo simples para selecionar artigos para recomendação.
-a seleção será ordenada conforme a confiança.}
+Com as métricas de confiança propostas acima, é possível estabelecer uma rede de confiança da comunidade, uma rede subjetiva do 
+pesquisador alvo e computar predições para os níveis de confiança de cada membro das redes em seus devidos contextos. Todavia 
+confiança apenas pode não ser suficiente para recomendações de qualidade. Considerar também algum fator como a distância entre 
+os pesquisadores na rede ou o conteúdo das publicações pode aumentar a qualidade das recomendações: Pesquisadores próximos na 
+rede podem encontrar mais facilidade para realizar colaborações e mesmo que a confiança em uma publicação seja alta, ela pode 
+não ser interessante para o pesquisador caso não se encaixe sem peril.
+
+Para augmentar as recomendações, é proposta uma simples pré-seleção dos itens utilizando um método baseado em conteúdo. A 
+técnica proposta consiste no cálculo de correspondência de palavras chave em um modelo de espaço vetorial (MEV), visto que 
+esta é a mais comum em sistemas de recomendação baseados em conteúdo \cite{ricci2011introduction}. No MEV proposto, a idéia é estabelecer um 
+perfil geral dos pesquisadores através de palavras chaves ponderadas por relevância, extraídas dos títulos e palavras chaves 
+das publicações do qual o autor fez parte. O perfil do pesquisador é representado por um vetor em um espaço \textit{n-dimensional}: 
+$d_j = {w_{1,j}, w_{2,j}, \dots ,d_{n,j}}$, no qual $w_{i,j}$ representa o quanto o termo $i$ é relevante dentro do trabalho do 
+pesquisador $j$. Pode-se pensar em uma matriz na qual as linhas são pesquisadores, conforme descrito e as colunas representam os 
+termos-chave extraídos do universo das publicações (\textit{corpus}), removendo palavras vazias - “ou”, “de”, “para” \dots - 
+tanto em português quanto em inglês.
+
+Tal matriz é construída através da técnica de vetorização \textit{TF-IDF}, na qual considera-se termos importantes aqueles que 
+aparecem com frequência relacionados á um item específico e com menor frequência nos outros itens do \textit{corpus} 
+\cite{pazzani2007content}. A partir disso é preciso computar a semelhança entre termos. Para tal, a proposta é o uso da 
+similaridade de cossenos por ser a técnica mais comumente aplicada \cite{ricci2011introduction}. Para a pré-seleção dos itens, então, a 
+proposta é basear-se em uma \textit{query} que representa o trabalho sendo desenvolvido pelo pesquisador no presente. A partir 
+desta, pode-se calcular as similaridades dos perfis dos autores cadastrados, construindo assim a pré-seleção.
+
+\subsection{Arquitetura}
+
 
 \subsection{Validação}
 
