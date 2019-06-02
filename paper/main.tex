@@ -441,47 +441,37 @@ desta, pode-se calcular as similaridades dos perfis dos autores cadastrados com 
 
 \subsection{Arquitetura} \label{sect:arch}
 
+Até então foram descritas técnicas que podem ser usadas para a computação de confiança entre membros de uma comunidade resultando 
+em vetores de confiança global e local bem como distâncias ponderadas por confiança. Também foi discutida a possibilidade de 
+augmentar recomendações baseadas em confiança usando o conteúdo dos itens disponíveis. Agora, uma descrição geral de como é 
+possível combinar as metodologias descritas para obter um resultado. 
+
+Em \cite{massa2004trust} é sugerida uma arquitetura de SR combinando filtragem colaborativa e método baseado em confiança. 
+O sistema é descrito em módulos substituíveis e portanto pode ser usado para combinar os métodos baseado em conteúdo e em 
+confiança. Basicamente a saída do método usado para pré seleção é usada para a partir das confianças computadas filtrar e 
+ordenar as recomendações, conforme a Figura \ref{fig:sr-arch}.
+
+\begin{center}
+ \begin{figure}[ht]
+   \includegraphics[width=1\textwidth]{SR-arch.png}
+   \caption{Arquitetura do SR}
+   \label{fig:sr-arch}
+ \end{figure}
+\end{center}
+
+É preciso então definir um método para, a partir de uma lista de itens ordenada por similaridade de cossenos e vetores de 
+confiança estimada, oferecer ao usuário uma amostra seleta com os pesquisadores mais relevantes seguindo as métricas de confiança
+(filtragem por confiança). Neste ponto, é possível usar alguma técnica para combinar as métricas de confiança, porém, é importante 
+as aplicar individualmente para observar os resultados. As linhas em pontilhado representam que os objetos são intercaláveis: 
+pode-se usar um ou outro ou combinações. Após a pré seleção, o custo computacional da aplicação das distâncias, por exemplo, 
+diminui consideravelmente pois é preciso apenas computar distâncias entre  o pesquisador alvo e uma amostra pequena de 
+pesquisadores com o perfil compatível com a \textit{query}.
+
+Portanto, uma vez aplicado o método por conteúdo, a proposta é aplicar a métrica de distâncias ponderadas por confiança em uma 
+amostra reduzida da rede, visto que a métrica em questão em teoria é mais indicada para promover colaboração entre os membros da 
+rede.
 
 \subsection{Validação} \label{sect:validation}
-
-%\section{Figures and Captions}\label{sec:figs}
-
-
-%Figure and table captions should be centered if less than one line
-%(Figure~\ref{fig:exampleFig1}), otherwise justified and indented by %0.8cm on
-%both margins, as shown in Figure~\ref{fig:exampleFig2}. The caption font must
-%be Helvetica, 10 point, boldface, with 6 points of space before and after each
-%caption.
-
-%\begin{figure}[ht]
-%\centering
-%\includegraphics[width=.5\textwidth]{fig1.jpg}
-%\caption{A typical figure}
-%\label{fig:exampleFig1}
-%\end{figure}
-
-%\begin{figure}[ht]
-%\centering
-%\includegraphics[width=.3\textwidth]{fig2.jpg}
-%caption{This figure is an example of a figure caption taking more than one
-%  line and justified considering margins mentioned in Section~\ref{sec:figs}.}
-%\label{fig:exampleFig2}
-%\end{figure}
-
-%In tables, try to avoid the use of colored or shaded backgrounds, and avoid
-%thick, doubled, or unnecessary framing lines. When reporting empirical data,
-%do not use more decimal digits than warranted by their precision and
-%reproducibility. Table caption must be placed before the table (see Table 1)
-%and the font used must also be Helvetica, 10 point, boldface, with 6 points of
-%space before and after each caption.
-
-%\begin{table}[ht]
-%\centering
-%\caption{Variables to be considered on the evaluation of interaction
-%  techniques}
-%label{tab:exTable1}
-%\includegraphics[width=.7\textwidth]{table.jpg}
-%\end{table}
 
 \bibliographystyle{sbc}
 \bibliography{sbc-template}
