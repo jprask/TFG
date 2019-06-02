@@ -291,12 +291,13 @@ global de citações, pensado para computar a importância das paginas web. O \t
 É definido para cada página $u$ um conjunto $F_u$ de páginas as quais $u$ referencia e um conjunto $B_u$ de páginas que fazem 
 referência à $u$. Sendo $\hat{A}$ a matriz de adjacência da web, tal que 
 
-\[ \hat{A}_{i,j} =
-  \begin{cases}
-    1       & \quad \text{se } \text{ há links de i para j}\\
-    0       & \quad \text{se } \text{ não há links de i para j}
-  \end{cases}
-\]
+\begin{equation} \label{eqn:adjacency-matrix}
+   \hat{A}_{i,j} =
+    \begin{cases}
+      1       & \quad \text{se } \text{ há links de i para j}\\
+      0       & \quad \text{se } \text{ não há links de i para j}
+    \end{cases}
+\end{equation}
 
 A matriz $A$ deve ser obtida dividindo todas as linhas de $\hat{A}$ por $|F_u|$ (o grau do nodo $u$). Assim, PageRank pode ser definido 
 como $R = c(AR + E)$, sendo $c$ um fator de normalização.
@@ -348,9 +349,9 @@ se encaixa particularmente bem no problema proposto por incorporar simultaneamen
 (os pesos de cada conexão) dos nodos. Aqui, o peso pode ser a soma das relevâncias das obras publicadas em conjunto entre os 
 pesquisadores. A fórmula proposta faz isso definindo um parâmetro $\alpha$ para ajustar a importância de grau e força:
 
-\begin{center} 
-  $ C_D ^{w \alpha} (i) = k_i \times \left( \frac {s_i} {k_i} \right) ^{\alpha} = k_i ^{1 - \alpha} \times s _i ^{\alpha} $
-\end{center}
+\begin{equation} \label{eqn:centrality} 
+ C_D ^{w \alpha} (i) = k_i \times \left( \frac {s_i} {k_i} \right) ^{\alpha} = k_i ^{1 - \alpha} \times s _i ^{\alpha}
+\end{equation}
 
 Ao incorporar o número e a relevância das publicações como um peso para as arestas da rede, é reintroduzido o conceito de 
 considerar a confiança da comunidade nos colaboradores que depositaram confiança em determinado autor através de publicações 
@@ -359,6 +360,30 @@ levando em conta informações sobre obras e autores que são relevantes para co
 os membros da rede.
 
 \subsubsection{Distância}
+
+A centralidade do pesquisador, ponderada pelo número de colaborações e suas relevâncias se mostra em teoria uma forte métrica de 
+confiança global. O cálculo de confiança local, porém, oferece uma estimativa da \textbf{confiança subjetiva} de um usuário em 
+relação aos membros da rede. Outra métrica valiosa neste contexto é a distância entre  os pesquisadores, isto é, identificar 
+\textbf{amigos de amigos} e pesquisadores próximos na rede é uma poderosa maneira de promover a colaboração entre pesquisadores: 
+pesquisadores próximos na rede podem encontrar mais facilidade para realizar colaborações. Para tal, a relevância e quantidade de 
+colaborações (pesos das arestas - confiança) deve ser um fator positivo e o número de nodos intermediários entre os autores um 
+fator negativo (maior distância).
+
+O algoritmo de Dijikstra \cite{dijkstra1959note} é definido para calcular distâncias em redes nas quais os pesos representam o 
+custo de travessia. O trabalho de Opsahl e Skvoretz \cite{opsahl2010node} é definido em redes onde os pesos representam força 
+dos laços, então os autores sugerem que os pesos devem ser invertidos. Além disso, o objetivo do trabalho é considerar também 
+o número de nós intermediários, então os autores propõem novamente o uso de um parâmetro de ajuste, $\alpha$, que controla o quão 
+importante considera-se o número de nodos intermediários e a força das conexões.
+
+\begin{equation} \label{eqn:distance}
+  d^{w\alpha}(i, j) = min \left( \frac{1}{ \left( w_{ih}^{\alpha} \right) } + \dots + \frac{1}{ \left( w_{hj}^{\alpha} \right) }  \right) 
+\end{equation}
+
+Esse conceito, aplicado à rede de colaborações, significa que a distância entre os pesquisadores levará em consideração o nível 
+de confiança das conexões bem como o número de pesquisadores intermediários. Para $\alpha < 1$, caminhos com maior número de 
+intermediários são considerados mais distantes, enquanto $\alpha > 1$ vai considerar mais importante a força das relações de 
+confiança, atribuindo menores distâncias para caminhos onde há fortes relações de confiança entre os pesquisadores, podendo estes 
+ter mais intermediários \cite{opsahl2010node}.
 
 \subsubsection{Confiança subjetiva}
 
@@ -371,9 +396,9 @@ usuário $u$. O conjunto dos colaboradores diretos de $u$, aqueles com os quais 
 como $G_{u}^{1}$ e os colaboradores dos colaboradores de $u$ são o conjunto $G_{u}^{2}$. Pode-se generalizar os colaboradores 
 de grau $n (n \geq 1)$ como o seguinte:
 
-\begin{center}
-  $ G_{u}^{n} = v | v \in F_{G_{u}^{n}}, v \notin B_{G_{u}^{n-1, n-2 \dots 0}} $
-\end{center}
+\begin{equation} \label{eqn:subjective-network}
+ G_{u}^{n} = v | v \in F_{G_{u}^{n}}, v \notin B_{G_{u}^{n-1, n-2 \dots 0}}
+\end{equation}
 
 Assim, $F_{G_{u}^{n}}$ e $B_{G_{u}^{n-1, n-2 \dots 0}}$ ambos  representam um grupo de pesquisadores que publicaram obras em conjunto 
 com os pesquisadores do conjunto $G_{u}^{n}$, considerado um voto de  confiança. A diferença é que os pesquisadores do conjunto 
