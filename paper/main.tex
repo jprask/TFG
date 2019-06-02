@@ -195,6 +195,12 @@ usuário \cite{sinha2001comparing}.
 
 \subsubsection{Métodos Híbridos}
 
+Métodos híbridos propõem a combinação de mais de um método de recomendação dentro de um sistema. É necessário para complementar 
+técnicas que podem apresentar problemas em determinadas situações ou para oferecer resultados melhores aos usuários. Furlan 
+\cite{da2018desenvolvimento} por exemplo combinou os métodos baseado em conteúdo e filtragem colaborativa para solucionar o problema da primeira 
+avaliação. Já Massa \cite{massa2004trust} sugere que um método que leve em consideração a confiança entre usuários pode melhorar a 
+performance de sistemas de filtragem colaborativa.
+
 \subsection{Trabalhos Correlatos}
 
 Os trabalhos correlatos foram escolhidos utilizando como critério a contemporaneidade e semelhança com o presente trabalho, 
@@ -224,6 +230,14 @@ item e usuário e serve como referência para a modelagem das relações do SR d
 apresenta um experimento para ilustrar a importância da opinião de especialistas \cite{primo2006tecnicas}.
 
 \subsubsection{Trust-aware Collaborative Filtering for Recommender Systems}
+
+O artigo sugere a possibilidade de melhorar as sugestões em sistemas de recomendação com métricas de confiança. Descreve a 
+modelagem de uma rede de confiança e a necessidade de métricas de propagação de confiança, que considera ser computável em 
+mais usuários do que a similaridade de perfis. A métrica usada é uma simples distância mínima entre nós para a estimativa de 
+confiança local. Os autores sugerem a aplicação do algoritmo PageRank \cite{page1999pagerank} como métrica de confiança global. Aqui a 
+proposta é seguir a arquitetura sugerida por \cite{massa2004trust} para a construção de um SR que combina os métodos baseados em 
+conteúdo e confiança. A arquitetura sugerida pelos autores é composta por módulos substituíveis que representam conceitualmente 
+a aplicação de um algoritmo. A adaptação da arquitetura está descrita na seção \ref{sect:arch}.
 
 \section{Materiais \& Métodos}
 
@@ -275,6 +289,7 @@ encontradas. O perfil do pesquisador é composto por sua \textbf{formação}, \t
 \textbf{publicações} das quais fez parte. A formação é representada por um título, que diz respeito ao nível de ensino, por 
 exemplo doutorado ou mestrado. 
 
+\newpage
 
 \subsection{Computando confiança} \label{sect:computing-trust}
 
@@ -422,7 +437,7 @@ Considerar também a linha de pesquisa do pesquisador no momento e os perfis dos
 das recomendações: Mesmo que a confiança em um pesquisador seja alta, a sugestão de colaboração pode não fazer sentido caso as 
 linhas de pesquisa não se encaixem.
 
-Para augmentar as recomendações, é proposta uma simples pré-seleção dos itens utilizando um método baseado em conteúdo. A 
+Para aprimorar as recomendações, é proposta uma simples pré-seleção dos itens utilizando um método baseado em conteúdo. A 
 técnica proposta consiste no cálculo de correspondência de palavras chave em um modelo de espaço vetorial (MEV), visto que 
 esta é a mais comum em sistemas de recomendação baseados em conteúdo \cite{ricci2011introduction}. No MEV proposto, a idéia é estabelecer um 
 perfil geral dos pesquisadores através de palavras chaves ponderadas por relevância, extraídas dos títulos e palavras chaves 
@@ -431,6 +446,8 @@ $d_j = {w_{1,j}, w_{2,j}, \dots ,d_{n,j}}$, no qual $w_{i,j}$ representa o quant
 pesquisador $j$. Pode-se pensar em uma matriz na qual as linhas são pesquisadores, conforme descrito e as colunas representam os 
 termos-chave extraídos do universo das publicações (\textit{corpus}), removendo palavras vazias - “ou”, “de”, “para” \dots - 
 tanto em português quanto em inglês.
+
+\newpage
 
 Tal matriz é construída através da técnica de vetorização \textit{TF-IDF}, na qual considera-se termos importantes aqueles que 
 aparecem com frequência relacionados á um item específico e com menor frequência nos outros itens do \textit{corpus} 
@@ -443,7 +460,7 @@ desta, pode-se calcular as similaridades dos perfis dos autores cadastrados com 
 
 Até então foram descritas técnicas que podem ser usadas para a computação de confiança entre membros de uma comunidade resultando 
 em vetores de confiança global e local bem como distâncias ponderadas por confiança. Também foi discutida a possibilidade de 
-augmentar recomendações baseadas em confiança usando o conteúdo dos itens disponíveis. Agora, uma descrição geral de como é 
+aprimorar recomendações baseadas em confiança usando o conteúdo dos itens disponíveis. Agora, uma descrição geral de como é 
 possível combinar as metodologias descritas para obter um resultado. 
 
 Em \cite{massa2004trust} é sugerida uma arquitetura de SR combinando filtragem colaborativa e método baseado em confiança. 
@@ -472,6 +489,8 @@ amostra reduzida da rede, visto que a métrica em questão em teoria é mais ind
 rede.
 
 \subsection{Validação} \label{sect:validation}
+
+\section{Discussão \& Conclusão}
 
 \bibliographystyle{sbc}
 \bibliography{sbc-template}
