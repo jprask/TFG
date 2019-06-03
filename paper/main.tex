@@ -374,7 +374,7 @@ em  conjunto para o cálculo da confiança estimada de tal autor. Assim, é poss
 levando em conta informações sobre obras e autores que são relevantes para considerar a confiança compartilhada entre 
 os membros da rede.
 
-\subsubsection{Distância}
+\subsubsection{Distância} \label{sect:distance}
 
 A centralidade do pesquisador, ponderada pelo número de colaborações e suas relevâncias se mostra em teoria uma forte métrica de 
 confiança global. O cálculo de confiança local, porém, oferece uma estimativa da \textbf{confiança subjetiva} de um usuário em 
@@ -489,6 +489,47 @@ amostra reduzida da rede, visto que a métrica em questão em teoria é mais ind
 rede.
 
 \subsection{Validação} \label{sect:validation}
+
+Várias métricas são sugeridas para medir a performance de um SR, quando a tarefa do sistema gira em torno de predizer avaliações, 
+é possível realizar predições e calcular o erro diretamente, de maneira supervisionada. Shani \cite{shani2011evaluating} sugere 
+que é importante considerar o contexto da aplicação de cada SR, pois como os objetivos de diferentes sistemas variam bastante, é 
+natural que variem também as métricas de validação. É preciso então avaliar cada caso e estabelecer quais as propriedades que 
+influenciam o sucesso do SR \cite{shani2011evaluating}.
+
+Considerando que o principal fator de sucesso do SR aqui proposto é a promoção da colaboração entre os pesquisadores da rede de 
+publicações, a métrica mais completa para a validação do sistema é subjetiva ao usuário: 
+
+\begin{itemize}
+  \item Estaria ele interessado em colaborar com o pesquisador recomendado ?
+  \item Qual a facilidade de iniciar a colaboração ?
+  \item Qual a confiança do usuário no pesquisador responsável ?  
+\end{itemize}
+
+Logo pode-se seguir por dois caminhos para a validação: implantar o sistema em alguma aplicação e acompanhar seus resultados no 
+mundo real, hipótese na qual considera-se uma recomendação de sucesso aquela que resultar em colaborações, ou realizar 
+recomendações para uma amostra seleta de pesquisadores e recolher seus \textit{feedbacks} sobre as recomendações.
+
+No contexto da implementação proposta neste artigo, somente é possível a segunda opção. Portanto foi elaborado um questionário 
+em dois momentos. A proposta é primeiramente perguntar a um grupo de pesquisadores qual a linha de pesquisa estão desenvolvendo, 
+nas seguintes palavras: \textit{“No que você está trabalhando no momento ? ”} - A resposta para tal pergunta será usada como a 
+\textit{query}, conforme ilustrado na figura \ref{fig:sr-arch}. A partir disso serão elaboradas as recomendações conforme a seção 
+\ref{sect:arch}. A validação virá no segundo momento do questionário, no qual os pesquisadores serão apresentados às sugestões 
+elaboradas e indagados sobre sua qualidade. É considerado que duas perguntas são suficientes para a avaliação:
+
+\begin{itemize}
+  \item \textit{“Você acha relevante a colaboração com este pesquisador?”}
+  \begin{itemize}
+    \item Resposta: sim/não
+  \end{itemize}
+  \item \textit{“Em uma escala de um a dez, o quão fácil você considera realizar uma colaboração com este pesquisador?”}
+  \begin{itemize}
+    \item Resposta: Valor no interválo [1, 10], 1 representa facilidade mínima e 10 representa máxima facilidade
+  \end{itemize}
+  \item \textit{“Em uma escala de um a dez, qual o seu nível de confiança nesse pesquisador?”}
+  \begin{itemize}
+    \item Resposta: Valor no interválo [1, 10], 1 representa confiança mínima e 10 representa confiança total.  
+  \end{itemize}
+\end{itemize}
 
 \section{Discussão \& Conclusão}
 
