@@ -533,6 +533,23 @@ elaboradas e indagados sobre sua qualidade. É considerado que duas perguntas s�
 
 \section{Discussão \& Conclusão}
 
+Aqui foi apresentado o conceito, no campo de sistemas de recomendação, de promover a colaboração entre membros de uma comunidade 
+de pesquisadores. Foi introduzido o conceito de Sistema de Recomendação, as técnicas mais utilizadas e uma tendência mais recente, 
+de recomendações baseadas em confiança. Foi sugerido um modelo de rede de confiança na qual pesquisadores são conectados por  
+publicações em conjunto, considerado um voto de confiança. Foram discutidas três métricas de propagação e agregação de confiança 
+na rede, usando conceitos do algoritmo PageRank \cite{page1999pagerank} e de métricas de centralidade e distância entre nodos em grafos 
+não-direcionados ponderados \cite{opsahl2010node}.
+
+A partir de então foi proposta a recomendação através da pré-seleção de perfis baseada em conteúdo seguida de filtragem dos perfis 
+via distância ponderada por confiança, seguindo a arquitetura proposta por Massa e Avesani \cite{massa2004trust} para um SR híbrido 
+utilizando o método baseado em conteúdo. Para a avaliação do modelo, foi apresentado o fator de sucesso que justifica a validação 
+através de questionários respondidos pelo usuário mediante sugestões elaboradas pelo SR.
+
+É possível estender o trabalho aqui proposto pensando em melhores heurísticas para a relevância das publicações, considerando por 
+exemplo a data de publicação, com diferentes pesos para diferentes épocas. É possível também incorporar mais métodos discutidos 
+na seção \ref{sect:computing-trust} para melhorar as recomendações, levando em consideração por exemplo métricas locais e globais, 
+além das distâncias.
+
 \bibliographystyle{sbc}
 \bibliography{sbc-template}
 
