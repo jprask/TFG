@@ -244,11 +244,7 @@ e recursos para trabalhos relacionados a manipulação de dados e computação n
 
 \subsection{Os Dados da Plataforma Lattes}
 
-Os dados usados no trabalho são provenientes de um banco de dados relacional extraído do currículo Lattes dos pesquisadores com o 
-uso de um \textit{parser}. O parser descrito em \cite{prass2019parser} oferece uma interface para a extração automatizada de dados 
-da plataforma Lattes. A partir dos arquivos \textit{XML} exportados da plataforma, o \textit{parser} faz uma análise a partir da 
-qual são montadas relações entre os itens presentes no banco e os novos itens, relacionando autores às suas publicações cadastradas, 
-ou seja, inserindo uma linha em uma tabela associativa entre autor e publicação, conforme a Figura \ref{fig:database}. A partir do banco descrito, é 
+Os dados usados no trabalho são provenientes do banco de dados relacional da Plataforma Kennis (www.kennis.com.br), que extraí os dados dos pesquisadores dos currículos armazenados na Plaforma Lattes com o uso de um \textit{parser}, cuja versão inicial é descrita em \cite{prass2019parser}. Optou-se pelo uso dos dados da Plataforma Kennis e não pelos dados originais da Plataforma Lattes, pois durante o processo de \textit{parse} dos currículos, a Plataforma Kennis faz a limpeza e o pré-processamento dos dados, associando pesquisadores através das suas publicações em conjunto, conforme mostra a Figura \ref{fig:database}. A partir do banco descrito, é 
 possível construir uma base de conhecimento focada especificamente no objetivo do presente trabalho, que é descrita a seguir.
 
 \begin{center}
@@ -264,15 +260,15 @@ possível construir uma base de conhecimento focada especificamente no objetivo 
 
 Uma publicação científica, normalmente, é uma produção de algum \textbf{tipo} (artigo, livro, trabalho) que passou por um processo de 
 revisão por pares e foi aceito como sendo uma contribuição válida, de autoria de um ou mais pesquisadores. A maioria das 
-publicações da base de conhecimento possuem alguma \textbf{palavra-chave}, informada pelos autores, que servem como uma pista 
+publicações da base de conhecimento possuem um conjunto de \textbf{palavras-chave}, informadas pelos autores, que servem como uma pista 
 dos assuntos abordados. As publicações são feitas originalmente em um \textbf{idioma} e \textbf{país} específicos e 
 obrigatoriamente possuem um \textbf{título} no idioma original bem como uma possível tradução para o inglês. O \textbf{ano} da 
 publicação é considerado relevante devido à característica progressiva do conhecimento científico, onde observa-se constante 
 introdução de novos dados e fatos. Em alguns casos é possível inferir a \textbf{abrangência} da publicação, por exemplo pode 
 ser regional, nacional ou internacional. Algumas tuplas podem também conter a \textbf{natureza}, que deve ser vista como o 
-nível de cobertura do assunto discutido alcançado pelo trabalho: Completo, resumo e assim por diante. A ordem dos nomes dos 
-autores geralmente é indicativo da importância do autor para a publicação: O \textbf{autor principal} geralmente é o primeiro 
-nome, e o \textbf{orientador} do trabalho o último. Entre eles, os colaboradores \textbf{intermediários}.  
+nível de cobertura do assunto discutido alcançado pelo trabalho: completo, resumo e assim por diante. A ordem dos nomes dos 
+autores geralmente é indicativo da importância do autor para a publicação: o \textbf{autor principal} geralmente é o primeiro 
+nome e o \textbf{orientador} do trabalho o último. Entre eles, os colaboradores \textbf{intermediários}.  
 
 \subsubsection{Pesquisadores}
 
