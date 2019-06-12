@@ -287,12 +287,9 @@ pode ser usada para computar a propagação de confiança através da rede. A co
 em consideração o nível de confiança estimado dos pesquisadores que colaboraram com ele.
 
 O algoritmo PageRank \cite{page1999pagerank} foi inspirado em parte por estudos realizados em redes de citações acadêmicas, nas 
-quais a relevância de um artigo era descrita por contagem de citações, por exemplo. Trata-se de um método para computar um \textit{ran\-king} 
-global de citações, pensado para computar a importância das paginas web. O \textit{ranking} $R$ de uma página é definido como a soma dos 
-\textit{rankings} das páginas que oferecem links para ela, ponderada pelo total de \textit{links} encontrados nas páginas.
+quais a relevância de um artigo era descrita por contagem de citações, por exemplo. Trata-se de um método para computar um \textit{ran\-king}  global de citações, pensado para computar a importância das páginas web. O \textit{ranking} $R$ de uma página é definido como a soma dos  \textit{rankings} das páginas que oferecem links para ela, ponderada pelo total de \textit{links} encontrados nas páginas.
 
-É definido para cada página $u$ um conjunto $F_u$ de páginas as quais $u$ referencia e um conjunto $B_u$ de páginas que fazem 
-referência à $u$. Sendo $\hat{A}$ a matriz de adjacência da web, tal que 
+Funciona da seguinte forma: é definido para cada página $u$ um conjunto $F_u$ de páginas as quais $u$ referencia e um conjunto $B_u$ de páginas que fazem referência à $u$. Sendo $\hat{A}$ a matriz de adjacência da web, tal que 
 
 \begin{equation} \label{eqn:adjacency-matrix}
    \hat{A}_{i,j} =
@@ -306,17 +303,17 @@ A matriz $A$ deve ser obtida dividindo todas as linhas de $\hat{A}$ por $|F_u|$ 
 como $R = c(AR + E)$, sendo $c$ um fator de normalização.
 
 Quando ocorrem ciclos no fluxo de referência, nos quais duas páginas se referenciam mutuamente e não fazem referência a nenhuma 
-outra página, pode ocorrer o chamado \textit{rank sink} quando há referencias exteriores injetando \textit{ranking} no ciclo, 
-assim as páginas do ciclo acumulam ranking, porém não há distribuição. Para solucionar, foi introduzido o vetor $E$, que no modelo 
+outra página, pode ocorrer o chamado \textit{rank sink}: referências exteriores injetam \textit{ranking} no ciclo, 
+fazendo com que páginas do ciclo acumulem pontuação, porém sem distribuição. Para solucionar, foi introduzido o vetor $E$, que no modelo 
 de PageRank é o conceito de um \textit{random surfer}, ou seja, uma probabilidade de um usuário da internet aleatoriamente mudar a 
 página, sem seguir nenhum de seus \textit{links}. \cite{page1999pagerank}
 
 A aplicação de PageRank à um grafo não-direcionado gera um vetor $R$ estatisticamente similar à distribuição de grau dos nodos da 
 rede \cite{perra2008spectral}. Isto é, aplicando diretamente o algoritmo ao problema proposto, no final das contas a confiança 
 seria proporcional ao número de publicações do autor (\textbf{centralidade} do nodo). Enquanto esta métrica é relevante, perde-se 
-a ideia inicial: Não é considerada a confiança dos colaboradores, somente o valor total de colaborações. 
+a ideia inicial: não é considerada a confiança dos colaboradores, somente o valor total de colaborações. 
 
-Além disso, alguns conceitos importantes não são levados em consideração: A relevância e o número de colaborações entre os 
+Além disso, dois conceitos importantes não são levados em consideração: a relevância e o número de colaborações entre os 
 pesquisadores. No caso da \textbf{relevância}, a importância da publicação é uma dica para o nível de confiança mútua entre os 
 pesquisadores: colaborações em publicações importantes requerem maior confiança. O total de \textbf{colaborações em conjunto} 
 entre um par de pesquisadores, por sua vez, indica uma relação mais duradoura, com mais confiança mútua. É importante distinguir 
@@ -326,9 +323,7 @@ pode-se somar as importâncias para avaliar a força dos laços de confiança.
 
 \subsubsection{Relevância}
 
-Nem todas as publicações são feitas iguais. É possível considerar as características descritas na representação de publicação 
-usada na base de conhecimento para construir uma heurśtica sobre a relevância da publicação. Pesos podem ser atribuidos para os 
-atributos contidos na tabela publicação. Aqui, a heurística considerada é a natureza da publicação, com pesos atribuidos conforme 
+As publicações não são iguais entre si. Para construir uma heurśtica que defina a relevância de uma publicação deve-se considerar as características descritas na representação da mesma, atribuindo pesos aos seus atributos. Aqui, a heurística considerada é a natureza da publicação, com pesos atribuidos conforme 
 a tabela \ref{tab:relavancy}.
 
 \begin{center}
@@ -347,7 +342,7 @@ de agregação e dissipação de confiança pode seguir a ideia do algoritmo \te
 cálculo da centralidade dos nodos. Assim, a relevância das publicações e a quantidade de colaborações podem ser levadas em 
 consideração na distribuição de confiança.
 
-Várias métricas foram propostas na literatura para o cálculo da centralidade, em especial a proposta em \cite{opsahl2010node} 
+Várias métricas foram propostas na literatura para o cálculo da centralidade, em especial a apresentada em \cite{opsahl2010node} 
 se encaixa particularmente bem no problema proposto por incorporar simultaneamente o grau (número de conexões) e a força 
 (os pesos de cada conexão) dos nodos. Aqui, o peso pode ser a soma das relevâncias das obras publicadas em conjunto entre os 
 pesquisadores. A fórmula proposta faz isso definindo um parâmetro $\alpha$ para ajustar a importância de grau e força:
@@ -366,8 +361,8 @@ os membros da rede.
 
 A centralidade do pesquisador, ponderada pelo número de colaborações e suas relevâncias se mostra em teoria uma forte métrica de 
 confiança global. O cálculo de confiança local, porém, oferece uma estimativa da \textbf{confiança subjetiva} de um usuário em 
-relação aos membros da rede. Outra métrica valiosa neste contexto é a distância entre  os pesquisadores, isto é, identificar 
-\textbf{amigos de amigos} e pesquisadores próximos na rede é uma poderosa maneira de promover a colaboração entre pesquisadores: 
+relação aos membros da rede. Outra métrica valiosa neste contexto é a distância entre os pesquisadores, isto é, identificar 
+\textbf{amigos de amigos} e pesquisadores próximos na rede é uma maneira de promover a colaboração entre pesquisadores: 
 pesquisadores próximos na rede podem encontrar mais facilidade para realizar colaborações. Para tal, a relevância e quantidade de 
 colaborações (pesos das arestas - confiança) deve ser um fator positivo e o número de nodos intermediários entre os autores um 
 fator negativo (maior distância).
@@ -390,9 +385,7 @@ ter mais intermediários \cite{opsahl2010node}.
 
 \subsubsection{Confiança subjetiva}
 
-Uma alternativa aos métodos descritos acima é transformar a rede de confiança em um grafo direcionado. Pode-se chegar nesse objetivo 
-gerando uma rede de confiança para cada pesquisador ao qual se deseja fazer recomendações. Com essa técnica, a aplicação direta 
-de PageRank à rede de confiança pode gerar um resultado significativo.
+Uma alternativa aos métodos descritos nas seções anteriores é transformar a rede de confiança em um grafo direcionado. Pode-se chegar nesse objetivo gerando uma rede de confiança para cada pesquisador ao qual se deseja fazer recomendações. Com essa técnica, a aplicação direta de PageRank à rede de confiança pode gerar um resultado significativo.
 
 Sejam $F$ e $B$ conjuntos de colaboradores, conforme definido em PageRank, $G_{u}^{0}$ o usuário alvo $u$ e $B_{u}^{0}$ também o 
 usuário $u$. O conjunto dos colaboradores diretos de $u$, aqueles com os quais $u$ possui publicações em conjunto, são definidos 
@@ -403,7 +396,7 @@ de grau $n (n \geq 1)$ como o seguinte:
  G_{u}^{n} = v | v \in F_{G_{u}^{n}}, v \notin B_{G_{u}^{n-1, n-2 \dots 0}}
 \end{equation}
 
-Assim, $F_{G_{u}^{n}}$ e $B_{G_{u}^{n-1, n-2 \dots 0}}$ ambos  representam um grupo de pesquisadores que publicaram obras em conjunto 
+Assim, $F_{G_{u}^{n}}$ e $B_{G_{u}^{n-1, n-2 \dots 0}}$ representam um grupo de pesquisadores que publicaram obras em conjunto 
 com os pesquisadores do conjunto $G_{u}^{n}$, considerado um voto de  confiança. A diferença é que os pesquisadores do conjunto 
 $B_{G_u^{n-1, n-2 \dots 0}}$ já apareceram na rede de confiança de $u$.
 
