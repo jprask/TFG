@@ -411,15 +411,15 @@ e não a confiança estimada da comunidade como um todo em cada pesquisador.
 
 \subsection{Pré-seleção de Recomendações} \label{sect:pre-selection}
 
-Com as métricas de confiança propostas acima, é possível estabelecer níveis de confiança da comunidade, uma rede subjetiva do 
+Com as métricas de confiança aqui propostas, é possível estabelecer níveis de confiança da comunidade, uma rede subjetiva do 
 pesquisador alvo ou distâncias ponderadas por confiança e usar as predições para oferecer sugestões de colaboradores para cada 
 membro da rede em diferentes contextos. Todavia confiança apenas pode não ser suficiente para recomendações de qualidade. 
 Considerar também a linha de pesquisa do pesquisador no momento e os perfis dos potenciais colaboradores pode aumentar a qualidade 
-das recomendações: Mesmo que a confiança em um pesquisador seja alta, a sugestão de colaboração pode não fazer sentido caso as 
+das recomendações: mesmo que a confiança em um pesquisador seja alta, a sugestão de colaboração pode não fazer sentido caso as 
 linhas de pesquisa não se encaixem.
 
-Para aprimorar as recomendações, é proposta uma simples pré-seleção dos itens utilizando um método baseado em conteúdo. A 
-técnica proposta consiste no cálculo de correspondência de palavras chave em um modelo de espaço vetorial (MEV), visto que 
+Para aprimorar as recomendações, é proposta uma pré-seleção dos itens utilizando um método baseado em conteúdo. A 
+técnica consiste no cálculo de correspondência de palavras chave em um modelo de espaço vetorial (MEV), visto que 
 esta é a mais comum em sistemas de recomendação baseados em conteúdo \cite{ricci2011introduction}. No MEV proposto, a ideia é estabelecer um 
 perfil geral dos pesquisadores através de palavras chaves ponderadas por relevância, extraídas dos títulos e palavras chaves 
 das publicações do qual o autor fez parte. O perfil do pesquisador é representado por um vetor em um espaço \textit{n-dimensional}: 
@@ -428,54 +428,50 @@ pesquisador $j$. Pode-se pensar em uma matriz na qual as linhas são pesquisador
 termos-chave extraídos do universo das publicações (\textit{corpus}), removendo palavras vazias - “ou”, “de”, “para” \dots - 
 tanto em português quanto em inglês.
 
-\newpage
-
 Tal matriz é construída através da técnica de vetorização \textit{TF-IDF}, na qual considera-se termos importantes aqueles que 
 aparecem com frequência relacionados á um item específico e com menor frequência nos outros itens do \textit{corpus} 
 \cite{pazzani2007content}. A partir disso é preciso computar a semelhança entre termos. Para tal, a proposta é o uso da 
-similaridade de cossenos por ser a técnica mais comumente aplicada \cite{ricci2011introduction}. Para a pré-seleção dos itens, então, a 
+similaridade de cossenos por ser a técnica mais comumente aplicada \cite{ricci2011introduction}. Para a pré-seleção dos itens, a 
 proposta é basear-se em uma \textit{query} que representa o trabalho sendo desenvolvido pelo pesquisador no presente. A partir 
 desta, pode-se calcular as similaridades dos perfis dos autores cadastrados com a \textit{query}, construindo assim a pré-seleção.
 
 \subsection{Arquitetura} \label{sect:arch}
 
-Até então foram descritas técnicas que podem ser usadas para a computação de confiança entre membros de uma comunidade resultando 
-em vetores de confiança global e local bem como distâncias ponderadas por confiança. Também foi discutida a possibilidade de 
-aprimorar recomendações baseadas em confiança usando o conteúdo dos itens disponíveis. Agora, uma descrição geral de como é 
+Até aqui foram descritas técnicas que podem ser usadas para a computação de confiança entre membros de uma comunidade, resultando 
+em vetores de confiança global e local, bem como distâncias ponderadas por confiança. Também foi discutida a possibilidade de 
+aprimorar recomendações baseadas em confiança usando o conteúdo dos itens disponíveis. Agora, detalha-se a descrição geral de como é 
 possível combinar as metodologias descritas para obter um resultado. 
 
 Em \cite{massa2004trust} é sugerida uma arquitetura de SR combinando filtragem colaborativa e método baseado em confiança. 
 O sistema é descrito em módulos substituíveis e portanto pode ser usado para combinar os métodos baseado em conteúdo e em 
-confiança. Basicamente a saída do método usado para pré seleção é usada para a partir das confianças computadas filtrar e 
-ordenar as recomendações, conforme a Figura \ref{fig:sr-arch}.
+confiança. Basicamente, conforme apresentado na Figura \ref{fig:sr-arch}, a saída do método usado para pré-seleção é usada para filtrar e ordenar as recomendações a partir das confianças computadas.
 
 \begin{center}
  \begin{figure}[ht]
    \includegraphics[width=1\textwidth]{SR-arch.png}
-   \caption{Arquitetura do SR}
+   \caption{Arquitetura do Sistema de Recomendação proposto}
    \label{fig:sr-arch}
  \end{figure}
 \end{center}
 
-É preciso então definir um método para, a partir de uma lista de itens ordenada por similaridade de cossenos e vetores de 
-confiança estimada, oferecer ao usuário uma amostra seleta com os pesquisadores mais relevantes seguindo as métricas de confiança
-(filtragem por confiança). Neste ponto, é possível usar alguma técnica para combinar as métricas de confiança, porém, é importante 
+É preciso então definir um método para oferecer ao usuário uma amostra seleta com os pesquisadores mais relevantes seguindo as métricas de confiança (filtragem por confiança) a partir de uma lista de itens ordenada por similaridade de cossenos e vetores de 
+confiança estimada. Neste ponto, é possível usar alguma técnica para combinar as métricas de confiança, porém é importante 
 as aplicar individualmente para observar os resultados. As linhas em pontilhado representam que os objetos são intercaláveis: 
-pode-se usar um ou outro ou combinações. Após a pré seleção, o custo computacional da aplicação das distâncias, por exemplo, 
-diminui consideravelmente pois é preciso apenas computar distâncias entre  o pesquisador alvo e uma amostra pequena de 
+pode-se usar um ou outro ou combinações. Após a pré-seleção, o custo computacional da aplicação das distâncias, por exemplo, 
+diminui consideravelmente pois é preciso apenas computar distâncias entre o pesquisador alvo e uma amostra pequena de 
 pesquisadores com o perfil compatível com a \textit{query}.
 
-Portanto, uma vez aplicado o método por conteúdo, a proposta é aplicar a métrica de distâncias ponderadas por confiança em uma 
+Portanto, uma vez aplicado o método por conteúdo, pode-se é aplicar a métrica de distâncias ponderadas por confiança em uma 
 amostra reduzida da rede, visto que a métrica em questão em teoria é mais indicada para promover colaboração entre os membros da 
 rede.
 
 \subsection{Validação} \label{sect:validation}
 
-Várias métricas são sugeridas para medir a performance de um SR, quando a tarefa do sistema gira em torno de predizer avaliações, 
-é possível realizar predições e calcular o erro diretamente, de maneira supervisionada. Shani \cite{shani2011evaluating} sugere 
-que é importante considerar o contexto da aplicação de cada SR, pois como os objetivos de diferentes sistemas variam bastante, é 
+Várias métricas são sugeridas para medir a performance de um SR quando a tarefa do sistema gira em torno de predizer avaliações, 
+é possível realizar predições e calcular o erro diretamente, de maneira supervisionada. \cite{shani2011evaluating} sugerem 
+que é importante considerar o contexto da aplicação de cada SR, pois como os objetivos de diferentes sistemas variam, é 
 natural que variem também as métricas de validação. É preciso então avaliar cada caso e estabelecer quais as propriedades que 
-influenciam o sucesso do SR \cite{shani2011evaluating}.
+influenciam o sucesso do SR.
 
 Considerando que o principal fator de sucesso do SR aqui proposto é a promoção da colaboração entre os pesquisadores da rede de 
 publicações, a métrica mais completa para a validação do sistema é subjetiva ao usuário: 
@@ -492,10 +488,10 @@ recomendações para uma amostra seleta de pesquisadores e recolher seus \textit
 
 No contexto da implementação proposta neste artigo, somente é possível a segunda opção. Portanto foi elaborado um questionário 
 em dois momentos. A proposta é primeiramente perguntar a um grupo de pesquisadores qual a linha de pesquisa estão desenvolvendo, 
-nas seguintes palavras: \textit{“No que você está trabalhando no momento ? ”} - A resposta para tal pergunta será usada como a 
+nas seguintes palavras: \textit{“No que você está trabalhando no momento?”} - A resposta para tal pergunta será usada como a 
 \textit{query}, conforme ilustrado na figura \ref{fig:sr-arch}. A partir disso serão elaboradas as recomendações conforme a seção 
 \ref{sect:arch}. A validação virá no segundo momento do questionário, no qual os pesquisadores serão apresentados às sugestões 
-elaboradas e indagados sobre sua qualidade. É considerado que duas perguntas são suficientes para a avaliação:
+elaboradas e indagados sobre sua qualidade. É considerado que três perguntas são suficientes para a avaliação:
 
 \begin{itemize}
   \item \textit{“Você acha relevante a colaboração com este pesquisador?”}
@@ -516,12 +512,12 @@ elaboradas e indagados sobre sua qualidade. É considerado que duas perguntas s�
 
 Aqui foi apresentado o conceito, no campo de sistemas de recomendação, de promover a colaboração entre membros de uma comunidade 
 de pesquisadores. Foi introduzido o conceito de Sistema de Recomendação, as técnicas mais utilizadas e uma tendência mais recente, 
-de recomendações baseadas em confiança. Foi sugerido um modelo de rede de confiança na qual pesquisadores são conectados por  
+de recomendações baseadas em confiança. Sugeriu-se um modelo de rede de confiança na qual pesquisadores são conectados por  
 publicações em conjunto, considerado um voto de confiança. Foram discutidas três métricas de propagação e agregação de confiança 
 na rede, usando conceitos do algoritmo PageRank \cite{page1999pagerank} e de métricas de centralidade e distância entre nodos em grafos 
 não-direcionados ponderados \cite{opsahl2010node}.
 
-A partir de então foi proposta a recomendação através da pré-seleção de perfis baseada em conteúdo seguida de filtragem dos perfis 
+A partir de então, foi proposta a recomendação através da pré-seleção de perfis baseada em conteúdo seguida de filtragem dos perfis 
 via distância ponderada por confiança, seguindo a arquitetura proposta por Massa e Avesani \cite{massa2004trust} para um SR híbrido 
 utilizando o método baseado em conteúdo. Para a avaliação do modelo, foi apresentado o fator de sucesso que justifica a validação 
 através de questionários respondidos pelo usuário mediante sugestões elaboradas pelo SR.
