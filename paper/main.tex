@@ -33,7 +33,7 @@
 \begin{abstract}
   This paper presents a proposal for building a recommender system that promotes collaboration between researchers in a 
   publication network. A trust network is abstracted in which researchers are bound by joint publications, which represents 
-  a mutual trust statement. Three metrics are discussed for  computing trust: global trust (from the community’s perspective), 
+  a mutual trust statement. Metrics are discussed for  computing trust: global trust (from the community’s perspective), 
   local trust (subjective to each researcher) or via the concept of distances, seeking “friends of a friend”. An architecture 
   is proposed to improve recommendation quality trough profile analysis, as well as validation metrics.
 \end{abstract}
@@ -41,7 +41,7 @@
 \begin{resumo} 
   Este artigo apresenta a proposta da elaboração de um sistema de recomendações para promover a colaboração entre pesquisadores 
   em uma rede de publicações. É abstraída uma rede de confiança na qual pesquisadores são unidos por publicações em conjunto, 
-  que constituem um voto de confiança mútua. São discutidas três métricas de computação de confiança: confiança global (da 
+  que constituem um voto de confiança mútua. São discutidas métricas de computação de confiança: confiança global (da 
   comunidade como um todo), local (subjetivo a cada pesquisador) ou com o conceito de distâncias, buscando “amigos de amigos”. 
   Foi proposta uma arquitetura para melhorar as recomendações através de análise  de perfil, além de métricas de validação.
 \end{resumo}
@@ -253,7 +253,7 @@ possível construir uma base de conhecimento focada especificamente no objetivo 
 \begin{center}
   \begin{figure}[ht]
     \centering
-    \includegraphics[width=.8\textwidth]{database.png}
+    \includegraphics[width=.65\textwidth]{database.png}
     \caption{Tabelas Pessoa, Produção e associativa \cite{prass2019parser}}
     \label{fig:database}
   \end{figure}
@@ -367,10 +367,38 @@ pesquisadores. A fórmula proposta faz isso definindo um parâmetro $\alpha$ par
 
 Ao incorporar o número e a relevância das publicações como um peso para as arestas da rede, é reintroduzido o conceito de 
 considerar a confiança da comunidade nos colaboradores que depositaram confiança em determinado autor através de publicações 
-em  conjunto para o cálculo da confiança estimada de tal autor. Assim, é possível chegar em um fluxo de confiança apurado 
-\textbf{table me}
+em  conjunto para o cálculo da confiança estimada de tal autor. Assim, é possível chegar em um fluxo de confiança apurado
 levando em conta informações sobre obras e autores que são relevantes para considerar a confiança compartilhada entre 
 os membros da rede.
+
+Na tabela \ref{tab:centrality} são apresentados os diferentes valores computados para a centralidade de cada nodo aplicando-se a 
+fórmula \ref{eqn:centrality} na rede exemplificada na figura \ref{fig:network}, variando o parâmetro $\alpha$. No caso, as 
+recomendações seriam ordenadas do maior para o menor valor computado. Para $\alpha = 0$ a centralidade de cada pesquisador seria 
+igual ao número de colaborações, aumentando-se $\alpha$ é atribuída maior importância para a heurística de relevância das 
+publicações.
+
+% Arrumar para o TFG 2: não juntar as duas traduções em uma única aresta
+
+\begin{center}
+  \begin{table}[ht]
+    \caption{Centralidade}
+    \label{tab:centrality}
+    \centering
+    \begin{tabular}{|lcccc|}
+      \hline
+      \rowcolor[HTML]{343434} 
+      \multicolumn{1}{|c}{\cellcolor[HTML]{343434}{\color[HTML]{FFFFFF} }}                       & \multicolumn{4}{c|}{\cellcolor[HTML]{343434}{\color[HTML]{FFFFFF} $C_D ^{w \alpha} (i)$}}                                              \\
+      \rowcolor[HTML]{656565} 
+      \multicolumn{1}{|c}{\multirow{-2}{*}{\cellcolor[HTML]{343434}{\color[HTML]{FFFFFF} Nodo}}} & {\color[HTML]{FFFFFF} $\alpha = 0.00$} & {\color[HTML]{FFFFFF} $\alpha = 0.50$} & {\color[HTML]{FFFFFF} $\alpha = 1.00$} & {\color[HTML]{FFFFFF} $\alpha = 1.50$} \\
+      \multicolumn{1}{|l|}{A}                                                                    & 3.00                        & 5.47                        & 10.00                       & 18.25                       \\
+      \multicolumn{1}{|l|}{B}                                                                    & 3.00                        & 5.74                        & 11.00                       & 21.06                       \\
+      \multicolumn{1}{|l|}{C}                                                                    & 2.00                        & 3.16                        & 5.00                        & 7.90                        \\
+      \multicolumn{1}{|l|}{D}                                                                    & 2.00                        & 5.09                        & 13.00                       & 33.00                       \\
+      \multicolumn{1}{|l|}{E}                                                                    & 2.00                        & 5.09                        & 13.00                       & 33.00                       \\ \hline
+    \end{tabular}
+  \end{table}  
+\end{center}
+
 
 \subsubsection{Distância} \label{sect:distance}
 
@@ -396,7 +424,9 @@ Esse conceito, aplicado à rede de colaborações, significa que a distância en
 de confiança das conexões bem como o número de pesquisadores intermediários. Para $\alpha < 1$, caminhos com maior número de 
 intermediários são considerados mais distantes, enquanto $\alpha > 1$ vai considerar mais importante a força das relações de 
 confiança, atribuindo menores distâncias para caminhos onde há fortes relações de confiança entre os pesquisadores, podendo estes 
-ter mais intermediários \cite{opsahl2010node}.
+ter mais intermediários \cite{opsahl2010node}. Na tabela \ref{tab:distances} são apresentadas as distâncias calculadas entre os 
+pesquisadores A e B, conforme a rede exemplificada na figura \ref{fig:network}. As recomendações seriam ordenadas da menor para a 
+maior distância.
 
 \begin{center}
   \begin{table}[ht]
@@ -408,7 +438,7 @@ ter mais intermediários \cite{opsahl2010node}.
       \rowcolor[HTML]{343434} 
       \multicolumn{1}{|c}{\cellcolor[HTML]{343434}{\color[HTML]{FFFFFF} }}                       & \multicolumn{4}{c|}{\cellcolor[HTML]{343434}{\color[HTML]{FFFFFF} $ d^{w\alpha}(i, j) $}}                                               \\
       \rowcolor[HTML]{656565} 
-      \multicolumn{1}{|c}{\multirow{-2}{*}{\cellcolor[HTML]{343434}{\color[HTML]{FFFFFF} Path}}} & {\color[HTML]{EFEFEF} $ \alpha = 0.00 $} & {\color[HTML]{EFEFEF} $ \alpha=0.50 $} & {\color[HTML]{EFEFEF} $ \alpha=1.00 $} & {\color[HTML]{EFEFEF} $ \alpha=1.50 $} \\ \cline{1-1}
+      \multicolumn{1}{|c}{\multirow{-2}{*}{\cellcolor[HTML]{343434}{\color[HTML]{FFFFFF} Caminho}}} & {\color[HTML]{EFEFEF} $ \alpha = 0.00 $} & {\color[HTML]{EFEFEF} $ \alpha=0.50 $} & {\color[HTML]{EFEFEF} $ \alpha=1.00 $} & {\color[HTML]{EFEFEF} $ \alpha=1.50 $} \\ \cline{1-1}
       \multicolumn{1}{|l|}{\{A, B\}}                                                             & 1.00                        & 0.81                        & 0.50                        & 0.35                        \\
       \multicolumn{1}{|l|}{\{A, C, B\}}                                                          & 2.00                        & 1.53                        & 0.83                        & 0.54                        \\
       \multicolumn{1}{|l|}{\{A, D, E, B\}}                                                       & 3.00                        & 1.72                        & 0.47                        & 0.19                        \\ \hline
@@ -451,7 +481,8 @@ possível combinar as metodologias descritas para obter um resultado.
 
 Em \cite{massa2004trust} é sugerida uma arquitetura de SR combinando filtragem colaborativa e método baseado em confiança. 
 O sistema é descrito em módulos substituíveis e portanto pode ser usado para combinar os métodos baseado em conteúdo e em 
-confiança. Basicamente, conforme apresentado na Figura \ref{fig:sr-arch}, a saída do método usado para pré-seleção é usada para filtrar e ordenar as recomendações a partir das confianças computadas.
+confiança. Basicamente, conforme apresentado na Figura \ref{fig:sr-arch}, a saída do método usado para pré-seleção é usada 
+para filtrar e ordenar as recomendações a partir das confianças computadas.
 
 \begin{center}
  \begin{figure}[ht]
