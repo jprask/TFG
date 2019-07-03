@@ -7,7 +7,7 @@
   [Sistema de Recomendação Baseado em Confiança para Promover a Colaboração em Redes de Pesquisa Científica]
   {TFG I - Proposta}
 \subtitle{Sistema de Recomendação Baseado em Confiança para Promover a Colaboração em Redes de Pesquisa Científica}
-\author[João Pedro Raskopf, Fernando Prass]{J.P.~Saldanha\inst{1} \and F.~Prass\inst{1}}
+\author[João Pedro Raskopf, Fernando Prass]{João Pedro Saldanha\inst{1} \and Fernando Prass\inst{1}}
 \institute[Some University]
 {
   \inst{1}%
@@ -56,34 +56,6 @@
     \end{itemize}
   \end{itemize}
 
-\end{frame} 
-
-\begin{frame}{Pesquisa Ciêntifica}{}
-  
-  \begin{itemize}
-    \item Incrementar o Conhecimento
-    
-    \begin{itemize}
-      \item Referências
-      \item Colaborações
-    \end{itemize}
-    
-    \item Não reinventar a roda
-    \item "Stand on the Shoulders of Giants" - Google Acadêmico
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}{Plataforma Lattes}{}
-  
-  \begin{itemize}
-    \item Base de dados de Curriculos
-  \end{itemize}
-
-  \begin{block}{CNPq}
-    "Padrão nacional  no  registro  da  vida pregressa e atual dos estudantes e pesquisadores do país"
-  \end{block}
-
 \end{frame}
 
 \begin{frame}{Sobrecarga de Informações}{}
@@ -109,16 +81,6 @@
 
 \end{frame}
 
-\begin{frame}{Sistemas de Recomendação}{}
-
-  \begin{itemize}
-    \item Pessoas tendem a considerar recomendações de amigos/especialistas
-    \item Analisar têndencias dentro de comunidades
-    \item Filtragem das informações/itens em websites
-  \end{itemize}
-
-\end{frame}
-
 \subsection[Objetivos]{}
 
 \begin{frame}{Objetivos}{}
@@ -126,20 +88,6 @@
   \begin{block}{Geral}
     Promover a colaboração de pesquisadores em trabalhos ciêntificos
   \end{block}
-
-  \begin{itemize}
-    \item Estudar funções e aplicações de sistemas de recomendação
-    \item Modelar a rede de confiança da comunidade científica
-    \item Estabelecer métricas de confiança para os dados disponíveis
-    \item Estimar a confiança entre os pesquisadores 
-    \item Pré-selecionar recomendações
-    \item Filtrar a pré-seleção com a confiança computada
-    \item Avaliar o modelo
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}{Proposta}{}
 
   \begin{itemize}
     \item Descrever uma rede de colaborações
@@ -208,7 +156,7 @@
       \item Baseando-se no perfil do currículo Lattes
     \end{itemize}
 
-    \item Aborda o problema da sobrecarga de informações 
+    \item Aborda o problema da primeira avaliação 
     \begin{itemize}
       \item Filtragem colaborativa \& Baseado em conhecimento
       \item Problema da primeira avaliação
@@ -245,6 +193,12 @@
 \begin{frame}{Materiais \& Métodos}{}
 
   \begin{itemize}
+    \item Plataforma Kennis
+    \begin{itemize}
+      \item Parser do currículo Lattes
+      \item Limpeza e pré-processamento
+      \item Banco de dados relacional
+    \end{itemize}
     \item Estimar a confiança entre pesquisadores
     \begin{itemize}
       \item Modelar uma rede de confiança
@@ -259,21 +213,10 @@
 
 \begin{frame}{Os Dados da Plataforma Lattes}{}
 
-  \begin{itemize}
-    \item Plataforma Kennis
-    \begin{itemize}
-      \item Parser do currículo Lattes
-      \item Limpeza e pré-processamento
-    \end{itemize}
-    \item Banco de dados relacional
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}{Diagrama ER}{}
   \begin{figure}[ht]
     \includegraphics[width=.65\textwidth]{database.png}
   \end{figure}
+
 \end{frame}
 
 \subsection{Computando Confiança}
@@ -302,29 +245,13 @@
 
   \begin{itemize}
     \item Ranking global de citações
-    \item Dissipação de ranking 
-    \begin{itemize}
-      \item Seja $R$ o ranking de uma página qualquer, $u$
-      \item $R$ é a soma dos rankings dissipados pelas paginas que referenciam $u$($B_u$)
-      \item $R$ é distribuído igualmente entre as páginas as quais $u$ faz referência ($F_u$)
-    \end{itemize}
+    \item Dissipação \& Agregação de ranking 
   \end{itemize}
-\end{frame}
 
-\begin{frame}{PageRank}{}
+  \begin{figure}[ht]
+    \includegraphics[width=.6\textwidth]{pagerank.png}
+  \end{figure}
 
-  \begin{itemize}
-    \item Matriz de adjacência
-    \begin{equation} \label{eqn:adjacency-matrix}
-      \hat{A}_{u,v} =
-       \begin{cases}
-         1       & \quad \text{se } \text{ há links de u para v}\\
-         0       & \quad \text{se } \text{ não há links de u para v}
-       \end{cases}
-   \end{equation}
-   \item $A = \frac {\hat{A}} {|F|}$
-   \item $R = c(AR + E)$
-  \end{itemize}
 \end{frame}
 
 \begin{frame}{PageRank}{}
@@ -352,6 +279,13 @@
 \end{frame}
 
 \begin{frame}{Centralidade}{Opsahl et al. 2010}
+  \begin{figure}[ht]
+    \includegraphics[width=.8\textwidth]{network-nodes.png}
+    \label{fig:sr-arch}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Centralidade}{Opsahl et al. 2010}
   \begin{equation} \label{eqn:centrality} 
     C_D ^{w \alpha} (i) = k_i ^{1 - \alpha} \times s _i ^{\alpha}
   \end{equation}
@@ -371,6 +305,13 @@
     \item Algoritmo de Dijikstra
     \item os pesos representam força dos laços
   \end{itemize}
+\end{frame}
+
+\begin{frame}{Centralidade}{Opsahl et al. 2010}
+  \begin{figure}[ht]
+    \includegraphics[width=.8\textwidth]{network-nodes.png}
+    \label{fig:sr-arch}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{Distância}{Opsahl et al. 2010}
