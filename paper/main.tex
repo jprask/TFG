@@ -87,6 +87,9 @@ Este método é conhecido como filtragem colaborativa e foi aprimorado desde ent
 deste, também é bastante difundido o método baseado em conteúdo, no qual novos itens são recomendados baseado no 
 conteúdo consumido pelo usuário no passado \cite{ricci2011introduction}.
 
+Neste trabalho, o foco será sistema de recomendação guiado por estimativa, ou confiança. Na estatĩstica, a confiança é um parâmetro
+de estimativa do intervalo observado \cite{}, ou seja, qual a porcentagem de confiaça da recomendação dada pelo sistema...........
+
 \subsection{Objetivos}
 
 Este trabalho propõe a elaboração de um sistema de recomendações de pesquisadores e trabalhos científicos baseado 
@@ -102,15 +105,13 @@ em confiança a partir de dados da plataforma Lattes. Para tal, é preciso:
   \item Avaliar o modelo
 \end{itemize}
 
-\subsection{Proposta}
-
-A ideia é analisar o sentimento de confiança entre os pesquisadores e sugerir conteúdo relevante baseado em seus perfis, 
+A proposta é analisar as relações de confiança entre os pesquisadores do banco e sugerir conteúdo relevante baseado em seus perfis, 
 ponderando o conteúdo com base na confiança estimada. Para solucionar o problema explanado, propõe-se descrever uma rede de colaborações 
-a partir de publicações em conjunto, discutida na seção \ref{sect:computing-trust} utilizando técnicas encontradas na literatura 
-para computar a propagação de confiança na rede. Para isso, algumas métricas são discutidas na seção \ref{sect:computing-trust}. 
-A partir daí, é discutida a pré-seleção dos itens com o método baseado em conteúdo (seção \ref{sect:pre-selection}), proposta uma 
-arquitetura para o sistema de recomendações (seção \ref{sect:arch}) e uma metodologia para sua validação 
-(seção \ref{sect:validation}).
+a partir de publicações em conjunto, discutida na Seção \ref{sect:computing-trust} utilizando técnicas encontradas na literatura 
+para computar a propagação de confiança na rede. Para isso, algumas métricas são discutidas na Seção \ref{sect:computing-trust}. 
+A partir daí, é discutida a pré-seleção dos itens com o método baseado em conteúdo (Seção \ref{sect:pre-selection}), proposta uma 
+arquitetura para o sistema de recomendações (Seção \ref{sect:arch}) e uma metodologia para sua validação 
+(Seção \ref{sect:validation}).
 
 \section{Revisão Bibliográfica}
 
@@ -130,7 +131,7 @@ específico de usuário. Logo, as características do SR, como metodologia usada
 e critério para ordenar os resultados devem ser adaptados às especificidades da tarefa em questão \cite{ricci2011introduction}. 
 
 A forma mais simples do resultado de um SR é uma lista de itens ordenada de acordo com a preferência do usuário. A satisfação 
-com as recomendações pode ser coletada explicitamente, como por exemplo através de avaliações, ou implicitamente através de 
+com as recomendações pode ser coletada explicitamente, como por exemplo por meio de avaliações, ou implicitamente com 
 inferências baseadas no comportamento do usuário perante aos itens oferecidos. Para oferecer recomendações, é preciso analisar 
 uma base de conhecimento, que pode ter diversas informações, realizar um trabalho de classificação dos itens ofertados e 
 então coletar algum tipo de \textit{feedback} perante o resultado que deve ser usado para aprimorar o sistema \cite{shani2011evaluating}.
@@ -158,7 +159,7 @@ de usuários com perfis similares (\textbf{vizinhos}). A ideia é que os itens b
 avaliados positivamente pelo usuário alvo, já que os perfis são semelhantes. Um problema encontrado na técnica é o da \textit{primeira avaliação}: quando há um item novo, sem nenhuma avaliação, como saber se determinado usuário irá avaliar 
 positivamente o mesmo? Nenhum de seus vizinhos fez avaliações \cite{ricci2011introduction}.
 
-SRs baseados em filtragem colaborativa são os mais populares na área e vêm sido pesquisados há mais tempo. \cite{ricci2011introduction} 
+SR baseados em filtragem colaborativa são os mais populares na área e vêm sido pesquisados há mais tempo. \cite{ricci2011introduction} 
 É comum utilizar métodos baseados em vizinhança, nos quais um algoritmo de clusterização é usado para determinar grupos 
 de usuários ou itens, tal como o algoritmo \textbf{KNN} (\textit{K-Nearest Neighbours}) \cite{da2018desenvolvimento}.
 
@@ -179,9 +180,9 @@ Conforme \cite{sinha2001comparing}, estudos indicam que os usuários têm a tend
 à \textbf{redes sociais} um novo método para a construção de sistemas de recomendação está sendo estudado, trata-se do método 
 baseado em confiança, ou sistema de recomendação social (\textit{social recommender system}) \cite{ricci2011introduction}.
 
-A construção de SRs sociais depende do estabelecimento de uma \textbf{rede de confiança}, rede que descreve 
+A construção de SR sociais depende do estabelecimento de uma \textbf{rede de confiança}, rede que descreve 
 o nível de confiança entre seus membros. Assim, o usuário recebe recomendações de itens avaliados positivamente por usuários 
-em sua rede de confiança. Estes SRs usam o conceito de \textbf{agregação e dissipação de confiança}, ou seja, 
+em sua rede de confiança. Estes SR usam o conceito de \textbf{agregação e dissipação de confiança}, ou seja, 
 dados um grupo de usuários $u_1  \dots u_n$, calcular o nível de confiança entre $u_1$ e $u_n$ considerando usuários intermediários
 $u_2 \dots u_{n-1}$ que possuem alguma relação de confiança, direta ou indireta, com $u_1$ e $u_n$ (\textbf{dissipação}) ou 
 combinar uma série de estimativas de confiança em um valor final (\textbf{agregação}) \cite{victor2011trust}.
@@ -229,26 +230,33 @@ item e usuário e serve como referência para a modelagem das relações do SR d
 
 \subsubsection{Trust-aware Collaborative Filtering for Recommender Systems}
 
-N artigo, \cite{massa2004trust} sugerem a possibilidade de melhorar as sugestões em sistemas de recomendação com métricas de confiança, descrevem a modelagem de uma rede de confiança e a necessidade de métricas de propagação de confiança, que consideram ser computável em 
+No artigo \cite{massa2004trust}, sugere-se a possibilidade de melhorar as sugestões em sistemas de recomendação com métricas de confiança, descrevem a modelagem de uma rede de confiança e a necessidade de métricas de propagação de confiança, que consideram ser computável em 
 mais usuários do que a similaridade de perfis. A métrica usada é a distância mínima entre nós para a estimativa de 
 confiança local. Os autores sugerem ainda a aplicação do algoritmo PageRank \cite{page1999pagerank} como métrica de confiança global. Pretende-se seguir a arquitetura sugerida no trabalho para a construção de um SR que combina os métodos baseados em 
 conteúdo e confiança, que é composta por módulos substituíveis que representam conceitualmente a aplicação de um algoritmo. A adaptação da arquitetura está descrita na seção \ref{sect:arch}.
 
-\section{Materiais \& Métodos}
+\section{Metodologia}
 
 Para chegar nas recomendações, é proposto um trabalho em dois momentos: estimar a confiança entre pesquisadores e então
 selecionar potenciais colaboradores baseando-se no perfil dos pesquisadores. A seleção será filtrada e ordenada de acordo com o 
 nível de confiança estimado dos pesquisadores. O primeiro passo é modelar uma rede de confiança da comunidade científica, descrita 
 por autores e publicações. Pode então ser feita uma seleção dos pesquisadores cadastrados com base no perfil do usuário alvo e 
 ordenar a seleção de acordo com o nível de confiança de cada pesquisador. A confiança pode ser local ou global, sendo que local diz 
-respeito à confiança estimada de um pesquisador específico em seus colegas e a global corresponde à a confiança da comunidade em 
-cada pesquisador. Em termos de ferramentas para implementação, foi escolhida a linguagem Python, que possui riqueza de ferramentas 
-e recursos para trabalhos relacionados a manipulação de dados e computação numérica.% \cite{python book} 
+respeito à confiança estimada de um pesquisador específico em seus colegas e a global corresponde à confiança da comunidade em 
+cada pesquisador. Em termos de ferramentas para implementação, foi escolhida a linguagem Python, que possui riqueza de 
+recursos para trabalhos relacionados a manipulação de dados e computação numérica.% \cite{python book} 
 
-\subsection{Os Dados da Plataforma Lattes}
+\subsection{Dados de análise}
 
-Os dados usados no trabalho são provenientes do banco de dados relacional da Plataforma Kennis (www.kennis.com.br), que extraí os dados dos pesquisadores dos currículos armazenados na Plaforma Lattes com o uso de um \textit{parser}, cuja versão inicial é descrita em \cite{prass2019parser}. Optou-se pelo uso dos dados da Plataforma Kennis e não pelos dados originais da Plataforma Lattes, pois durante o processo de \textit{parse} dos currículos, a Plataforma Kennis faz a limpeza e o pré-processamento dos dados, associando pesquisadores através das suas publicações em conjunto, conforme mostra a Figura \ref{fig:database}. A partir do banco descrito, é 
-possível construir uma base de conhecimento focada especificamente no objetivo do presente trabalho, que é descrita a seguir.
+Os dados usados no trabalho são provenientes do banco de dados relacional da Plataforma Kennis (www.kennis.com.br), que extraí os 
+dados dos pesquisadores dos currículos armazenados na Plaforma Lattes com o uso de um \textit{parser}, cuja versão inicial é 
+descrita em \cite{prass2019parser}. Optou-se pelo uso dos dados da Plataforma Kennis e não pelos dados originais da Plataforma 
+Lattes, pois durante o processo de \textit{parse} dos currículos, a Plataforma Kennis faz a limpeza e o pré-processamento dos 
+dados, associando pesquisadores através das suas publicações em conjunto, conforme mostra a Figura \ref{fig:database}. 
+% Paragrafo/frase explicando a figura
+
+% novo paragrafo
+A partir do banco descrito, é possível construir uma base de conhecimento focada especificamente no objetivo do presente trabalho.
 
 \begin{center}
   \begin{figure}[ht]
