@@ -13,7 +13,7 @@
 
 \usepackage{multirow}
 \usepackage[table,xcdraw]{xcolor}
-     
+
 \sloppy
 
 \title{Sistema de Recomendação Baseado em Confiança para Promover a Colaboração em Redes de Pesquisa Científica}
@@ -37,7 +37,7 @@
   local trust (subjective to each researcher) or via the concept of distances, seeking “friends of a friend”. An architecture 
   is proposed to improve recommendation quality trough profile analysis, as well as validation metrics.
 \end{abstract}
-     
+
 \begin{resumo} 
   Este artigo apresenta a proposta da elaboração de um sistema de recomendações para promover a colaboração entre pesquisadores 
   em uma rede de publicações. É abstraída uma rede de confiança na qual pesquisadores são unidos por publicações em conjunto, 
@@ -46,24 +46,8 @@
   Foi proposta uma arquitetura para melhorar as recomendações através de análise  de perfil, além de métricas de validação.
 \end{resumo}
 
-
 \section{Introdução}
 
-No método científico, pesquisadores devem realizar um trabalho criativo sistemático para incrementar 
-o conhecimento na área da pesquisa. Parte importante do processo é a busca, dentro do universo dos 
-trabalhos científicos, por embasamento teórico ao tema do trabalho proposto. Além disto, também é 
-relevante conhecer e colaborar com outros pesquisadores desenvolvendo trabalhos relacionados dentro da 
-área de pesquisa.  Portanto, é preciso reunir todas as informações pertinentes, pesquisas e resultados 
-anteriores bem como linhas de pesquisa em progresso para não reinventar a roda ou seguir caminhos já 
-trilhados e assim realizar trabalho relevante e produtivo.
-
-A plataforma Lattes é um sistema que integra bases de dados de currículos, em específico de pesquisadores. 
-Ela oferece aos usuários a possibilidade de criar um currículo de maneira gratuita, que é disponibilizado 
-abertamente aos visitantes do site. Segundo \cite{CNPq2019lattes}, o Currículo Lattes 
-\textit{"se tornou um padrão nacional no registro da vida pregressa e atual dos estudantes e 
-pesquisadores do país, e é hoje adotado pela maioria das instituições de fomento, universidades e 
-institutos de pesquisa do País"}.
-    
 O universo da pesquisa científica está em constante expansão, tanto no que diz respeito ao conhecimento 
 produzido quanto ao volume de trabalhos e publicações. Estimativas apontavam um valor em torno de 2.5 
 milhões de artigos científicos publicados por ano, em 2015, com um aumento de 5\% ao ano no número de 
@@ -77,7 +61,7 @@ pesquisadores da área e acabam por perder a oportunidade de colaborações ou t
 Logo, se faz necessário a filtragem da informação que chega ao pesquisador para maximizar sua eficiência e 
 evitar tempo perdido. A automação da tarefa de filtragem é feita através de sistemas de recomendação. 
 Utilizando técnicas de mineração de dados e inteligência artificial pode-se oferecer conteúdo mais relevante, 
-aumentando a eficiência do acadêmico. 
+aumentando a eficiência do acadêmico.
 
 A partir do problema da sobrecarga de informações, nos anos 90 iniciou-se a pesquisa na área de filtragem de conteúdo. 
 O ponto de partida foi a observação que as pessoas usam, no dia-a-dia, dicas de outros para tomar decisões, sendo que 
@@ -87,8 +71,15 @@ Este método é conhecido como filtragem colaborativa e foi aprimorado desde ent
 deste, também é bastante difundido o método baseado em conteúdo, no qual novos itens são recomendados baseado no 
 conteúdo consumido pelo usuário no passado \cite{ricci2011introduction}.
 
-Neste trabalho, o foco será sistema de recomendação guiado por estimativa, ou confiança. Na estatĩstica, a confiança é um parâmetro
-de estimativa do intervalo observado \cite{}, ou seja, qual a porcentagem de confiaça da recomendação dada pelo sistema...........
+A plataforma Lattes é um sistema que integra bases de dados de currículos, em específico de pesquisadores. 
+Ela oferece aos usuários a possibilidade de criar um currículo de maneira gratuita, que é disponibilizado 
+abertamente aos visitantes do site. Segundo \cite{CNPq2019lattes}, o Currículo Lattes 
+\textit{"se tornou um padrão nacional no registro da vida pregressa e atual dos estudantes e 
+pesquisadores do país, e é hoje adotado pela maioria das instituições de fomento, universidades e 
+institutos de pesquisa do País"}.
+
+Neste trabalho, o tema é a construção de um sistema de recomendações pertencente a uma terceira categoria: Baseado em confiança.
+Trata-se de um metodo baseado em estimativas do sentimento de confiança entre os pesquisadores.
 
 \subsection{Objetivos}
 
@@ -213,8 +204,7 @@ trabalho será usada no presente trabalho como referência para a elaboração d
 e fortes da abordagem descrita no trabalho. Em particular, será considerada a maneira com que o trabalho propôs solucionar 
 o problema  da avaliação inicial de um SR de filtragem colaborativa através do método baseado em conteúdo.
 
-\subsubsection{Técnicas de Recomendação para usuários de Bibliotecas
-Digitais}
+\subsubsection{Técnicas de Recomendação para usuários de Bibliotecas Digitais}
 
 \cite{primo2006tecnicas} apresentam algumas das mais populares técnicas de recomendação, bem como a justificativa e contexto para a 
 correta implementação dos mesmos. O trabalho descreve diversas abordagens para a elaboração de um SR de obras literárias 
@@ -225,7 +215,7 @@ Lattes. Além disto, o trabalho apresenta ainda um experimento para ilustrar a i
 
 O comparativo das metodologias usadas serve como referência para a elaboração do SR descrito no presente trabalho. 
 As relações entre usuário e items (no caso, obras literárias) é descrita através de uma ontologia na qual conceitos são 
-definidos pelos termos que os definem e organizados em uma hierarquia. A ontologia serve para descrever as relações entre 
+representados pelos termos que os definem e organizados em uma hierarquia. A ontologia serve para descrever as relações entre 
 item e usuário e serve como referência para a modelagem das relações do SR desenvolvido neste trabalho.
 
 \subsubsection{Trust-aware Collaborative Filtering for Recommender Systems}
