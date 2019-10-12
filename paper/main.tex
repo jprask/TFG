@@ -1,29 +1,27 @@
 \documentclass[12pt]{article}
-
 \usepackage{sbc-template}
-
 \usepackage{graphicx,url}
-
 \usepackage{mathtools}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
 
-\usepackage[brazil]{babel}   
-\usepackage[utf8]{inputenc}  
-
-\usepackage[autostyle]{csquotes}  
+\usepackage[autostyle]{csquotes}
 
 \usepackage{multirow}
 \usepackage[table,xcdraw]{xcolor}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
 
 \sloppy
 
 \title{Sistema de Recomendação Baseado em Confiança para Promover a Colaboração em Redes de Pesquisa Científica}
 
-\author{João Pedro R. D. Saldanha\inst{1}, Fernando Prass\inst{1}}
+\author{João Pedro R. D. Saldanha\inst{1}, Alexandre Zamberlan\inst{1}, Fernando Prass\inst{1}}
 
 
 \address{Ciência da Computação -- Universidade Franciscana (UFN)\\
   Rua dos Andradas, 1614  -- 97010-032  -- Santa Maria -- RS -- Brasil
-\email{\{joao.pedro,fernando.prass\}@ufn.edu.br}
+\email{\{joao.pedro,alexz,fernando.prass\}@ufn.edu.br}
 }
 
 \begin{document} 
@@ -43,10 +41,26 @@
   em uma rede de publicações. É abstraída uma rede de confiança na qual pesquisadores são unidos por publicações em conjunto, 
   que constituem um voto de confiança mútua. São discutidas métricas de computação de confiança: confiança global (da 
   comunidade como um todo), local (subjetivo a cada pesquisador) ou com o conceito de distâncias, buscando “amigos de amigos”. 
-  Foi proposta uma arquitetura para melhorar as recomendações através de análise  de perfil, além de métricas de validação.
+  Foi proposta uma arquitetura para melhorar as recomendações por meio de análise  de perfil, além de métricas de validação.
 \end{resumo}
 
+
 \section{Introdução}
+
+No método científico, pesquisadores devem realizar um trabalho criativo sistemático para incrementar 
+o conhecimento na área da pesquisa. Parte importante do processo é a busca, dentro do universo dos 
+trabalhos científicos, por embasamento teórico ao tema do trabalho proposto. Além disto, também é 
+relevante conhecer e colaborar com outros pesquisadores desenvolvendo trabalhos relacionados dentro da 
+área de pesquisa.  Portanto, é preciso reunir todas as informações pertinentes, pesquisas e resultados 
+anteriores bem como linhas de pesquisa em progresso para não reinventar a roda ou seguir caminhos já 
+trilhados e assim realizar trabalho relevante e produtivo.
+
+A plataforma Lattes é um sistema que integra bases de dados de currículos, em específico de pesquisadores. 
+Ela oferece aos usuários a possibilidade de criar um currículo de maneira gratuita, que é disponibilizado 
+abertamente aos visitantes do site. Segundo \cite{CNPq2019lattes}, o Currículo Lattes 
+\textit{"se tornou um padrão nacional no registro da vida pregressa e atual dos estudantes e 
+pesquisadores do país, e é hoje adotado pela maioria das instituições de fomento, universidades e 
+institutos de pesquisa do País"}.
 
 O universo da pesquisa científica está em constante expansão, tanto no que diz respeito ao conhecimento 
 produzido quanto ao volume de trabalhos e publicações. Estimativas apontavam um valor em torno de 2.5 
@@ -61,25 +75,20 @@ pesquisadores da área e acabam por perder a oportunidade de colaborações ou t
 Logo, se faz necessário a filtragem da informação que chega ao pesquisador para maximizar sua eficiência e 
 evitar tempo perdido. A automação da tarefa de filtragem é feita através de sistemas de recomendação. 
 Utilizando técnicas de mineração de dados e inteligência artificial pode-se oferecer conteúdo mais relevante, 
-aumentando a eficiência do acadêmico.
+aumentando a eficiência do acadêmico. 
 
 A partir do problema da sobrecarga de informações, nos anos 90 iniciou-se a pesquisa na área de filtragem de conteúdo. 
 O ponto de partida foi a observação que as pessoas usam, no dia-a-dia, dicas de outros para tomar decisões, sendo que 
 as dicas daqueles tidos como especialistas no assunto tem um peso diferenciado. Os primeiros sistemas de recomendação 
-eram algoritmos capazes de analizar tendências dentro de uma certa comunidade e então fazer sugestões aos seus membros. 
+eram algoritmos capazes de analisar tendências dentro de uma certa comunidade e então fazer sugestões aos seus membros. 
 Este método é conhecido como filtragem colaborativa e foi aprimorado desde então, sendo até hoje bastante popular. Além 
 deste, também é bastante difundido o método baseado em conteúdo, no qual novos itens são recomendados baseado no 
 conteúdo consumido pelo usuário no passado \cite{ricci2011introduction}.
 
-A plataforma Lattes é um sistema que integra bases de dados de currículos, em específico de pesquisadores. 
-Ela oferece aos usuários a possibilidade de criar um currículo de maneira gratuita, que é disponibilizado 
-abertamente aos visitantes do site. Segundo \cite{CNPq2019lattes}, o Currículo Lattes 
-\textit{"se tornou um padrão nacional no registro da vida pregressa e atual dos estudantes e 
-pesquisadores do país, e é hoje adotado pela maioria das instituições de fomento, universidades e 
-institutos de pesquisa do País"}.
+Confiança é um sentimento que pode ser descrito como o ato de contar com a credibilidade e consistência das ações de um indivíduo. Trata-se de um elemento citado por muitos autores como o mais importante para a construção de uma relação de trabalho positiva, por ser essencial para criticismo construtivo e evolução mútua dentro do processo de pesquisa \cite{bagshaw2007international}. Portanto, esse artigo foca na construção de um sistema de recomendações de pesquisadores baseado em confiança.
 
-Neste trabalho, o tema é a construção de um sistema de recomendações pertencente a uma terceira categoria: Baseado em confiança.
-Trata-se de um metodo baseado em estimativas do sentimento de confiança entre os pesquisadores.
+Neste trabalho, o foco será sistema de recomendação guiado por estimativa, ou confiança ou heurística. Na estatística, a confiança é um parâmetro
+de estimativa do intervalo observado \cite{ekstrand2019recommender}, ou seja, qual a porcentagem de confiança da recomendação dada pelo sistema.
 
 \subsection{Objetivos}
 
@@ -98,11 +107,7 @@ em confiança a partir de dados da plataforma Lattes. Para tal, é preciso:
 
 A proposta é analisar as relações de confiança entre os pesquisadores do banco e sugerir conteúdo relevante baseado em seus perfis, 
 ponderando o conteúdo com base na confiança estimada. Para solucionar o problema explanado, propõe-se descrever uma rede de colaborações 
-a partir de publicações em conjunto, discutida na Seção \ref{sect:computing-trust} utilizando técnicas encontradas na literatura 
-para computar a propagação de confiança na rede. Para isso, algumas métricas são discutidas na Seção \ref{sect:computing-trust}. 
-A partir daí, é discutida a pré-seleção dos itens com o método baseado em conteúdo (Seção \ref{sect:pre-selection}), proposta uma 
-arquitetura para o sistema de recomendações (Seção \ref{sect:arch}) e uma metodologia para sua validação 
-(Seção \ref{sect:validation}).
+a partir de publicações em conjunto, discutida na Seção~\ref{sect:computing-trust} utilizando técnicas encontradas na literatura para computar a propagação de confiança na rede. A partir disso, é discutida a pré-seleção dos itens com o método baseado em conteúdo (Seção~\ref{sect:pre-selection}), proposta uma arquitetura para o sistema de recomendações (Seção~\ref{sect:arch}) e uma metodologia para sua validação (Seção~\ref{sect:validation}).
 
 \section{Revisão Bibliográfica}
 
@@ -190,110 +195,18 @@ técnicas que podem apresentar problemas em determinadas situações ou para ofe
 avaliação. Já Massa \cite{massa2004trust} sugere que um método que leve em consideração a confiança entre usuários pode melhorar a 
 performance de sistemas de filtragem colaborativa.
 
-\subsection{Trabalhos Correlatos}
 
-Os trabalhos correlatos foram escolhidos utilizando como critério a contemporaneidade e semelhança com o presente trabalho, 
-de forma a trazer um embasamento atualizado das metodologias usadas para a resolução de problemas semelhantes.
+\subsection{Análise de Dados em Redes Sociais}\label{sect:analysis}
 
-\subsubsection{Desenvolvimento de um Sistema de Recomendação para Bibliotecas Digitais}
-
-\cite{da2018desenvolvimento} aborda o problema da sobrecarga de informações dos pesquisadores baseando-se no perfil do currículo Lattes. 
-O trabalho busca recomendações de produções científicas utilizando o motor de buscas Google Acadêmico e traz uma combinação 
-das técnicas de filtragem colaborativa e baseado em conhecimento. A metodologia para gerar recomendações utilizada neste 
-trabalho será usada no presente trabalho como referência para a elaboração do SR, levando em consideração os pontos fracos 
-e fortes da abordagem descrita no trabalho. Em particular, será considerada a maneira com que o trabalho propôs solucionar 
-o problema  da avaliação inicial de um SR de filtragem colaborativa através do método baseado em conteúdo.
-
-\subsubsection{Técnicas de Recomendação para usuários de Bibliotecas Digitais}
-
-\cite{primo2006tecnicas} apresentam algumas das mais populares técnicas de recomendação, bem como a justificativa e contexto para a 
-correta implementação dos mesmos. O trabalho descreve diversas abordagens para a elaboração de um SR de obras literárias 
-em bibliotecas digitais, usando as técnicas de filtragem colaborativa e baseado em conteúdo bem como uma abordagem híbrida. 
-O contexto do sistema de recomendação descrito no trabalho se assemelha ao do presente trabalho por ter como alvo uma 
-biblioteca digital, sendo que as obras literárias da biblioteca podem ser comparadas aos artigos encontrados na plataforma 
-Lattes. Além disto, o trabalho apresenta ainda um experimento para ilustrar a importância da opinião de especialistas.
-
-O comparativo das metodologias usadas serve como referência para a elaboração do SR descrito no presente trabalho. 
-As relações entre usuário e items (no caso, obras literárias) é descrita através de uma ontologia na qual conceitos são 
-representados pelos termos que os definem e organizados em uma hierarquia. A ontologia serve para descrever as relações entre 
-item e usuário e serve como referência para a modelagem das relações do SR desenvolvido neste trabalho.
-
-\subsubsection{Trust-aware Collaborative Filtering for Recommender Systems}
-
-No artigo \cite{massa2004trust}, sugere-se a possibilidade de melhorar as sugestões em sistemas de recomendação com métricas de confiança, descrevem a modelagem de uma rede de confiança e a necessidade de métricas de propagação de confiança, que consideram ser computável em 
-mais usuários do que a similaridade de perfis. A métrica usada é a distância mínima entre nós para a estimativa de 
-confiança local. Os autores sugerem ainda a aplicação do algoritmo PageRank \cite{page1999pagerank} como métrica de confiança global. Pretende-se seguir a arquitetura sugerida no trabalho para a construção de um SR que combina os métodos baseados em 
-conteúdo e confiança, que é composta por módulos substituíveis que representam conceitualmente a aplicação de um algoritmo. A adaptação da arquitetura está descrita na seção \ref{sect:arch}.
-
-\section{Metodologia}
-
-Para chegar nas recomendações, é proposto um trabalho em dois momentos: estimar a confiança entre pesquisadores e então
-selecionar potenciais colaboradores baseando-se no perfil dos pesquisadores. A seleção será filtrada e ordenada de acordo com o 
-nível de confiança estimado dos pesquisadores. O primeiro passo é modelar uma rede de confiança da comunidade científica, descrita 
-por autores e publicações. Pode então ser feita uma seleção dos pesquisadores cadastrados com base no perfil do usuário alvo e 
-ordenar a seleção de acordo com o nível de confiança de cada pesquisador. A confiança pode ser local ou global, sendo que local diz 
-respeito à confiança estimada de um pesquisador específico em seus colegas e a global corresponde à confiança da comunidade em 
-cada pesquisador. Em termos de ferramentas para implementação, foi escolhida a linguagem Python, que possui riqueza de 
-recursos para trabalhos relacionados a manipulação de dados e computação numérica.% \cite{python book} 
-
-\subsection{Dados de análise}
-
-Os dados usados no trabalho são provenientes do banco de dados relacional da Plataforma Kennis (www.kennis.com.br), que extraí os 
-dados dos pesquisadores dos currículos armazenados na Plaforma Lattes com o uso de um \textit{parser}, cuja versão inicial é 
-descrita em \cite{prass2019parser}. Optou-se pelo uso dos dados da Plataforma Kennis e não pelos dados originais da Plataforma 
-Lattes, pois durante o processo de \textit{parse} dos currículos, a Plataforma Kennis faz a limpeza e o pré-processamento dos 
-dados, associando pesquisadores através das suas publicações em conjunto, conforme mostra a Figura \ref{fig:database}. 
-% Paragrafo/frase explicando a figura
-
-% novo paragrafo
-A partir do banco descrito, é possível construir uma base de conhecimento focada especificamente no objetivo do presente trabalho.
-
-\begin{center}
-  \begin{figure}[ht]
-    \centering
-    \includegraphics[width=.65\textwidth]{database.png}
-    \caption{Tabelas Pessoa, Produção e associativa \cite{prass2019parser}}
-    \label{fig:database}
-  \end{figure}
- \end{center}
-
-Uma publicação científica, normalmente, é uma produção de algum \textbf{tipo} (artigo, livro, trabalho) que passou por um processo de 
-revisão por pares e foi aceito como sendo uma contribuição válida, de autoria de um ou mais pesquisadores. A maioria das 
-publicações da base de conhecimento possuem um conjunto de \textbf{palavras-chave}, informadas pelos autores, que servem como uma pista 
-dos assuntos abordados. As publicações são feitas originalmente em um \textbf{idioma} e \textbf{país} específicos e 
-obrigatoriamente possuem um \textbf{título} no idioma original bem como uma possível tradução para o inglês. O \textbf{ano} da 
-publicação é considerado relevante devido à característica progressiva do conhecimento científico, onde observa-se constante 
-introdução de novos dados e fatos. Em alguns casos é possível inferir a \textbf{abrangência} da publicação, por exemplo pode 
-ser regional, nacional ou internacional. Algumas tuplas podem também conter a \textbf{natureza}, que deve ser vista como o 
-nível de cobertura do assunto discutido alcançado pelo trabalho: completo, resumo e assim por diante. A ordem dos nomes dos 
-autores geralmente é indicativo da importância do autor para a publicação: o \textbf{autor principal} geralmente é o primeiro 
-nome e o \textbf{orientador} do trabalho o último. Entre eles, os colaboradores \textbf{intermediários}.
-
-Os autores são o centro dos dados da base de conhecimento e são também responsáveis por cadastrar todas as informações lá encontradas. 
-O perfil do pesquisador é composto por sua \textbf{formação}, \textbf{atuação profissional}, e \textbf{publicações} das quais fez 
-parte. A formação é representada por um título, que diz respeito ao nível de ensino, por exemplo doutorado ou mestrado.
-
-\subsection{Computando confiança} \label{sect:computing-trust}
-
-Pode-se pensar na rede de confiança como sendo um grafo no qual os nodos são pesquisadores e as arestas publicações em conjunto. 
-Uma colaboração em publicações é um voto de confiança entre os pesquisadores envolvidos. A matriz de adjacência pode ser usada 
-para computar a propagação de confiança através da rede. A confiança estimada de determinado pesquisador pode levar em consideração 
+Pode-se pensar na rede de colaborações como sendo um grafo no qual os nodos são pesquisadores e as arestas publicações em conjunto. 
+Além disso uma colaboração em publicações é um voto de confiança entre os pesquisadores envolvidos. A matriz de adjacência pode ser usada 
+para computar a propagação de confiança por meio da rede. A confiança estimada de determinado pesquisador pode levar em consideração 
 o nível de confiança estimado dos pesquisadores que colaboraram com ele. Outro fator que pode ser considerado é a facilidade de 
 colaboração, levando em  consideração “distâncias” na rede: se dois pesquisadores A e B têm laços de confiança com um intermediário 
-C, a colaboração entre A e B tende a ser mais fácil do que se houvesse mais intermediários na rede. A figura \ref{fig:network} 
-representa a rede de confiança descrita, os pesos das arestas são discutidos na secção \ref{sect:relevancy}.
-
-\begin{center}
-  \begin{figure}[ht]
-    \centering
-    \includegraphics[width=1\textwidth]{trust-network.png}
-    \caption{Rede de confiança}
-    \label{fig:network}
-  \end{figure}
- \end{center}
+C, a colaboração entre A e B tende a ser mais fácil do que se houvesse mais intermediários na rede.
 
 O algoritmo PageRank \cite{page1999pagerank} foi inspirado em parte por estudos realizados em redes de citações acadêmicas, nas 
-quais a relevância de um artigo era descrita por contagem de citações, por exemplo. Trata-se de um método para computar um \textit{ran\-king}  global de citações, pensado para computar a importância das páginas web. O \textit{ranking} $R$ de uma página é definido como a soma dos  \textit{rankings} das páginas que oferecem links para ela, ponderada pelo total de \textit{links} encontrados nas páginas.
+quais a relevância de um artigo era descrita por contagem de citações, por exemplo. Trata-se de um método para computar um \textit{ranking}  global de citações, pensado para obter a importância das páginas web. O \textit{ranking} $R$ de uma página é definido como a soma dos  \textit{rankings} das páginas que oferecem \textit{links} para ela, ponderada pelo total de \textit{links} encontrados nas páginas.
 
 Funciona da seguinte forma: é definido para cada página $u$ um conjunto $F_u$ de páginas as quais $u$ referencia e um conjunto $B_u$ de páginas que fazem referência à $u$. Sendo $\hat{A}$ a matriz de adjacência da web, tal que 
 
@@ -311,57 +224,134 @@ como $R = c(AR + E)$, sendo $c$ um fator de normalização.
 Quando ocorrem ciclos no fluxo de referência, nos quais duas páginas se referenciam mutuamente e não fazem referência a nenhuma 
 outra página, pode ocorrer o chamado \textit{rank sink}: referências exteriores injetam \textit{ranking} no ciclo, 
 fazendo com que páginas do ciclo acumulem pontuação, porém sem distribuição. Para solucionar, foi introduzido o vetor $E$, que no modelo 
-de PageRank é o conceito de um \textit{random surfer}, ou seja, uma probabilidade de um usuário da internet aleatoriamente mudar a 
-página, sem seguir nenhum de seus \textit{links}. \cite{page1999pagerank}
+de PageRank é o conceito de um \textit{random surfer}, ou seja, uma probabilidade de um usuário da internet aleatoriamente mudar a página, sem seguir nenhum de seus \textit{links} \cite{page1999pagerank}.
 
-A aplicação de PageRank à um grafo não-direcionado gera um vetor $R$ estatisticamente similar à distribuição de grau dos nodos da 
-rede \cite{perra2008spectral}. Isto é, aplicando diretamente o algoritmo ao problema proposto, no final das contas a confiança 
-seria proporcional ao número de publicações do autor (\textbf{centralidade} do nodo). Enquanto esta métrica é relevante, perde-se 
-a ideia inicial: não é considerada a confiança dos colaboradores, somente o valor total de colaborações. 
-
-Além disso, dois conceitos importantes não são levados em consideração: a relevância e o número de colaborações entre os 
-pesquisadores. No caso da \textbf{relevância}, a importância da publicação é uma dica para o nível de confiança mútua entre os 
-pesquisadores: colaborações em publicações importantes requerem maior confiança. O total de \textbf{colaborações em conjunto} 
-entre um par de pesquisadores, por sua vez, indica uma relação mais duradoura, com mais confiança mútua. É importante distinguir 
-total bruto de publicações de determinado pesquisador e o número de colaborações entre dois pesquisadores, pois há mais confiança 
-quando observa-se frequentes colaborações.  Uma vez estabelecida uma heurística para a importância de determinada colaboração, 
-pode-se somar as importâncias para avaliar a força dos laços de confiança.
-
-\subsubsection{Relevância} \label{sect:relevancy}
-
-As publicações não são iguais entre si. Para construir uma heurśtica que defina a relevância de uma publicação deve-se considerar as características descritas na representação da mesma, atribuindo pesos aos seus atributos. Aqui, a heurística considerada é a natureza da publicação, com pesos atribuidos conforme 
-a tabela \ref{tab:relavancy}.
-
-\begin{center}
-  \begin{table}[ht]
-    \centering
-    \caption{Heurśtica de Relevância}
-    \label{tab:relavancy}
-    \includegraphics[width=.4\textwidth]{heuristics.png}
-    \end{table}
-\end{center}
-
-Vale ressaltar que a heurística neste caso é relativa por haver muitos fatores que influenciam a relevância de uma publicação: 
-artigos  em certas publicações de prestígio podem valer mais que capítulos de livro, e o mesmo pode ser verdade para textos em 
-jornais ou revistas. Da mesma maneira, publicações mais recentes podem valer mais do que publicações mais antigas, porém o 
-contrário pode ser verdade para linhas de pesquisa na área da história, por exemplo. É possível também considerar mais do que a 
-relevância e quantidade das publicações para descrever os laços de confiança entre pesquisadores.
-
-\subsubsection{Centralidade}
-
-Considerando as heurísticas discutidas, é possível alcançar um fluxo de confiança mais interessante na rede modelada. O conceito 
-de agregação e dissipação de confiança pode seguir a ideia do algoritmo \textit{PageRank} aplicando-se um algoritmo para o 
-cálculo da centralidade dos nodos. No caso, a relevância das publicações e a quantidade de colaborações devem ser levadas em 
-consideração na distribuição de confiança.
-
-Várias métricas foram propostas na literatura para o cálculo da centralidade, em especial a apresentada em \cite{opsahl2010node} 
-se encaixa particularmente bem no problema proposto por incorporar simultaneamente o grau (número de conexões) e a força 
-(os pesos de cada conexão) dos nodos. Aqui, o peso pode ser a soma das relevâncias das obras publicadas em conjunto entre os 
-pesquisadores. A fórmula proposta faz isso definindo um parâmetro $\alpha$ para ajustar a importância de grau e força:
+A centralidade è uma métrica da teoria dos grafos usada para representar a importância de um nodo na rede. Centralidade de grau è definida como o numero de arestas com as quais um nodo se conecta. A métrica de centralidade apresentada em \cite{opsahl2010node} 
+se encaixa particularmente bem em casos nos quais o peso da aresta representa a força da conexão, tal qual o problema proposto neste trabalho, por incorporar simultaneamente o grau (número de conexões) e a força (os pesos de cada conexão) dos nodos. O peso pode ser a soma das relevâncias das obras publicadas em conjunto entre os pesquisadores. A fórmula proposta pelos autores faz isso definindo um parâmetro $\alpha$ para ajustar a importância de grau e força:
 
 \begin{equation} \label{eqn:centrality} 
  C_D ^{w \alpha} (i) = k_i \times \left( \frac {s_i} {k_i} \right) ^{\alpha} = k_i ^{1 - \alpha} \times s _i ^{\alpha}
 \end{equation}
+
+No contexto de distância, o algoritmo de Dijikstra \cite{dijkstra1959note} é definido para calcular distâncias em redes nas quais os pesos representam o custo de travessia. O trabalho de Opsahl e Skvoretz \cite{opsahl2010node} é definido em redes onde os pesos representam força dos laços, então os autores sugerem que os pesos devem ser invertidos. Além disso, o objetivo do trabalho é considerar também o número de nós intermediários, então os autores propõem novamente o uso de um parâmetro de ajuste, $\alpha$, que controla o quão importante considera-se o número de nodos intermediários e a força das conexões.
+
+\begin{equation} \label{eqn:distance}
+  d^{w\alpha}(i, j) = min \left( \frac{1}{ \left( w_{ih}^{\alpha} \right) } + \dots + \frac{1}{ \left( w_{hj}^{\alpha} \right) }  \right) 
+\end{equation}
+
+Frequentemente na análise de dados é necessário o uso de clusterização. O algoritmo MeanShift é indicado para dados nos quais se espera muitos \textit{clusters} distintos e de tamanhos variáveis \cite{scikit-learn}. A implementação é descrita como uma busca por centróides baseada em grafo de vizinhos mais próximos. O parâmetro \textit{bandwidth} é usado como estimativa para o tamanho dos clusters.
+
+\subsection{Trabalhos Correlatos}
+
+Os trabalhos correlatos foram escolhidos utilizando como critério a contemporaneidade e semelhança com o presente trabalho, 
+de forma a trazer um embasamento atualizado das metodologias usadas para a resolução de problemas semelhantes.
+
+\subsubsection{Desenvolvimento de um Sistema de Recomendação para Bibliotecas Digitais}
+
+No trabalho de \cite{da2018desenvolvimento}, é abordado o problema da sobrecarga de informações dos pesquisadores baseando-se no perfil do currículo Lattes. 
+O trabalho busca recomendações de produções científicas utilizando o motor de buscas Google Acadêmico e traz uma combinação 
+das técnicas de filtragem colaborativa e baseado em conhecimento. A metodologia para gerar recomendações utilizada neste 
+trabalho será usada no presente trabalho como referência para a elaboração do SR, levando em consideração os pontos fracos 
+e fortes da abordagem descrita no trabalho. Em particular, será considerada a maneira com que o trabalho propôs solucionar 
+o problema  da avaliação inicial de um SR de filtragem colaborativa através do método baseado em conteúdo.
+
+\subsubsection{Técnicas de Recomendação para usuários de Bibliotecas
+Digitais}
+
+Em \cite{primo2006tecnicas}, são apresentadas algumas das mais populares técnicas de recomendação, bem como a justificativa e contexto para a 
+correta implementação dos mesmos. O trabalho descreve diversas abordagens para a elaboração de um SR de obras literárias 
+em bibliotecas digitais, usando as técnicas de filtragem colaborativa e baseado em conteúdo bem como uma abordagem híbrida. 
+O contexto do sistema de recomendação descrito no trabalho se assemelha ao do presente trabalho por ter como alvo uma 
+biblioteca digital, sendo que as obras literárias da biblioteca podem ser comparadas aos artigos encontrados na plataforma 
+Lattes. Além disto, o trabalho apresenta ainda um experimento para ilustrar a importância da opinião de especialistas.
+
+O comparativo das metodologias usadas serve como referência para a elaboração do SR descrito no presente trabalho. 
+As relações entre usuário e items (no caso, obras literárias) é descrita através de uma ontologia na qual conceitos são 
+definidos pelos termos que os definem e organizados em uma hierarquia. A ontologia serve para descrever as relações entre 
+item e usuário e serve como referência para a modelagem das relações do SR desenvolvido neste trabalho.
+
+\subsubsection{Trust-aware Collaborative Filtering for Recommender Systems}
+
+No artigo \cite{massa2004trust}, sugere-se a possibilidade de melhorar as sugestões em sistemas de recomendação com métricas de confiança, descrevem a modelagem de uma rede de confiança e a necessidade de métricas de propagação de confiança, que consideram ser computável em 
+mais usuários do que a similaridade de perfis. A métrica usada é a distância mínima entre nós para a estimativa de 
+confiança local. Os autores sugerem ainda a aplicação do algoritmo PageRank \cite{page1999pagerank} como métrica de confiança global. Pretende-se seguir a arquitetura sugerida no trabalho para a construção de um SR que combina os métodos baseados em conteúdo e confiança, que é composta por módulos substituíveis que representam conceitualmente a aplicação de um algoritmo. A adaptação da arquitetura está descrita na Seção~\ref{sect:arch}.
+
+\section{Metodologia}
+
+Para chegar nas recomendações, é proposto um trabalho em dois momentos: estimar a confiança entre pesquisadores e então
+selecionar potenciais colaboradores baseando-se no perfil dos pesquisadores. A seleção será filtrada e ordenada de acordo com o 
+nível de confiança estimado dos pesquisadores. O primeiro passo é modelar uma rede de confiança da comunidade científica, descrita 
+por autores e publicações. Pode então ser feita uma seleção dos pesquisadores cadastrados com base no perfil do usuário alvo e 
+ordenar a seleção de acordo com o nível de confiança de cada pesquisador. A confiança pode ser local ou global, sendo que local diz 
+respeito à confiança estimada de um pesquisador específico em seus colegas e a global corresponde à confiança da comunidade em 
+cada pesquisador. Em termos de ferramentas para implementação, foi escolhida a linguagem Python, que possui riqueza de 
+recursos para trabalhos relacionados a manipulação de dados e computação numérica.% \cite{python book} 
+
+\subsection{Dados de análise}
+
+Os dados usados no trabalho são provenientes do banco de dados relacional da Plataforma Kennis (www.kennis.com.br), que extraí os 
+dados dos currículos de pesquisadores cadastrados na Plaforma Lattes com o uso de um \textit{parser}, cuja versão inicial é descrita em \cite{prass2019parser}. Optou-se pelo uso dos dados da Plataforma Kennis e não pelos dados originais da Plataforma 
+Lattes, pois durante o processo de \textit{parse} dos currículos, a Plataforma Kennis faz a limpeza e o pré-processamento dos 
+dados, associando pesquisadores e suas publicações, conforme mostra a Figura \ref{fig:database}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=.55\textwidth]{database.png}
+    \caption{Tabelas Pessoa, Produção e associativa \cite{prass2019parser}.}\label{fig:database}
+\end{figure}
+ 
+
+A partir do banco descrito, é possível construir uma base de conhecimento focada especificamente no objetivo do presente trabalho.
+
+Uma publicação científica, normalmente, é uma produção de algum \textbf{tipo} (artigo, livro, trabalho) que passou por um processo de 
+revisão por pares e foi aceito como sendo uma contribuição válida, de autoria de um ou mais pesquisadores. 
+
+A maioria das publicações da base de conhecimento possuem um conjunto de \textbf{palavras-chave}, informadas pelos autores, que servem como uma pista dos assuntos abordados. As publicações são feitas originalmente em um \textbf{idioma} e \textbf{país} específicos e obrigatoriamente possuem um \textbf{título} no idioma original bem como uma possível tradução para o inglês. O \textbf{ano} da 
+publicação é considerado relevante devido à característica progressiva do conhecimento científico, onde observa-se constante 
+introdução de novos dados e fatos. Em alguns casos é possível inferir a \textbf{abrangência} da publicação, por exemplo pode 
+ser regional, nacional ou internacional. Algumas tuplas podem também conter a \textbf{natureza}, que deve ser vista como o 
+nível de cobertura do assunto discutido alcançado pelo trabalho: completo, resumo e assim por diante. A ordem dos nomes dos 
+autores geralmente é indicativo da importância do autor para a publicação: o \textbf{autor principal} geralmente é o primeiro 
+nome e o \textbf{orientador} do trabalho o último. Entre eles, os colaboradores \textbf{intermediários}.
+
+Os autores são o centro dos dados da base de conhecimento e são também responsáveis por cadastrar todas as informações lá encontradas. 
+O perfil do pesquisador é composto por sua \textbf{formação}, \textbf{atuação profissional}, e \textbf{publicações} das quais fez 
+parte. A formação é representada por um título, que diz respeito ao nível de ensino, por exemplo doutorado ou mestrado.
+
+\subsection{Computando confiança} \label{sect:computing-trust}
+
+A Figura~\ref{fig:network} representa a rede de confiança desta proposta (discutida na Seção~\ref{sect:analysis}, ilustrando os pesos das arestas (discutidos na Seção~\ref{sect:relevancy}).
+
+
+  \begin{figure}[ht]
+    \centering
+    \includegraphics[width=1\textwidth]{trust-network.png}
+    \caption{Rede de confiança}
+    \label{fig:network}
+  \end{figure}
+
+
+A aplicação de PageRank (discutido na Seção~\ref{sect:analysis}) a um grafo não-direcionado gera um vetor $R$ estatisticamente similar à distribuição de grau dos nodos da rede \cite{perra2008spectral}. Isto é, aplicando diretamente o algoritmo ao problema proposto, no final das contas a confiança seria proporcional ao número de publicações do autor (\textbf{centralidade} do nodo). Enquanto esta métrica é relevante, perde-se a ideia inicial: não é considerada a confiança dos colaboradores, somente o valor total de colaborações. Além disso, dois conceitos importantes não são levados em consideração: a relevância e o número de colaborações entre os pesquisadores. No caso da \textbf{relevância}, a importância da publicação é uma dica para o nível de confiança mútua entre os pesquisadores: colaborações em publicações importantes requerem maior confiança. O total de \textbf{colaborações em conjunto} entre um par de pesquisadores, por sua vez, indica uma relação mais duradoura, com mais confiança mútua. É importante distinguir 
+total bruto de publicações de determinado pesquisador e o número de colaborações entre dois pesquisadores, pois há mais confiança 
+quando observa-se frequentes colaborações.  Uma vez estabelecida uma heurística para a importância de determinada colaboração, 
+pode-se somar as importâncias para avaliar a força dos laços de confiança.
+
+\subsubsection{Relevância, Centralidade e Distância} \label{sect:relevancy}
+
+As publicações não são iguais entre si. Para construir uma heurística ou estimativa que defina a relevância de uma publicação deve-se considerar as características descritas na representação da mesma, atribuindo pesos aos seus atributos. Aqui, a heurística considerada é a natureza da publicação, com pesos atribuídos conforme a Tabela~\ref{tab:relavancy}.
+
+
+\begin{table}[ht]
+    \centering
+    \caption{Heurística de Relevância.}
+    \label{tab:relavancy}
+    \includegraphics[width=.35\textwidth]{heuristics.png}
+\end{table}
+
+
+Vale ressaltar que a heurística neste caso é relativa por haver muitos fatores que influenciam a relevância de uma publicação: artigos  em certas publicações de prestígio podem valer mais que capítulos de livro, e o mesmo pode ser verdade para textos em jornais ou revistas. Da mesma maneira, publicações mais recentes podem valer mais do que publicações mais antigas, porém o contrário pode ser verdade para linhas de pesquisa na área da história, por exemplo. É possível também considerar mais do que a relevância e quantidade das publicações para descrever os laços de confiança entre pesquisadores.
+
+Considerando as heurísticas discutidas, é possível alcançar um fluxo de confiança mais interessante na rede modelada. O conceito de agregação e dissipação de confiança pode seguir a ideia do algoritmo \textit{PageRank} aplicando-se um algoritmo para o cálculo da centralidade dos nodos (Equação~\ref{eqn:centrality}). No caso, a relevância das publicações e a quantidade de colaborações devem ser levadas em consideração na distribuição de confiança.
 
 Ao incorporar o número e a relevância das publicações como um peso para as arestas da rede, é reintroduzido o conceito de 
 considerar a confiança da comunidade nos colaboradores que depositaram confiança em determinado autor através de publicações 
@@ -369,15 +359,14 @@ em  conjunto para o cálculo da confiança estimada de tal autor. Assim, é poss
 levando em conta informações sobre obras e autores que são relevantes para considerar a confiança compartilhada entre 
 os membros da rede.
 
-Na tabela \ref{tab:centrality} são apresentados os diferentes valores computados para a centralidade de cada nodo aplicando-se a 
-fórmula \ref{eqn:centrality} na rede exemplificada na figura \ref{fig:network}, variando o parâmetro $\alpha$. No caso, as 
+Na Tabela~\ref{tab:centrality} são apresentados os diferentes valores computados para a centralidade de cada nodo aplicando-se a 
+Equação~\ref{eqn:centrality} na rede exemplificada na Figura~\ref{fig:network}, variando o parâmetro $\alpha$. No caso, as 
 recomendações seriam ordenadas do maior para o menor valor computado. Para $\alpha = 0$ a centralidade de cada pesquisador seria 
 igual ao número de colaborações, aumentando-se $\alpha$ é atribuída maior importância para a heurística de relevância das 
 publicações.
 
 % Arrumar para o TFG 2: não juntar as duas traduções em uma única aresta
 
-\begin{center}
   \begin{table}[ht]
     \caption{Centralidade}
     \label{tab:centrality}
@@ -395,10 +384,7 @@ publicações.
       \multicolumn{1}{|l|}{E}                                                                    & 2.00                        & 5.09                        & 13.00                       & 33.00                       \\ \hline
     \end{tabular}
   \end{table}  
-\end{center}
 
-
-\subsubsection{Distância} \label{sect:distance}
 
 A centralidade do pesquisador, ponderada pelo número de colaborações e suas relevâncias se mostra em teoria uma forte métrica de 
 confiança global. O cálculo de confiança local, porém, oferece uma estimativa da \textbf{confiança subjetiva} de um usuário em 
@@ -408,25 +394,9 @@ pesquisadores próximos na rede podem encontrar mais facilidade para realizar co
 colaborações (pesos das arestas - confiança) deve ser um fator positivo e o número de nodos intermediários entre os autores um 
 fator negativo (maior distância).
 
-O algoritmo de Dijikstra \cite{dijkstra1959note} é definido para calcular distâncias em redes nas quais os pesos representam o 
-custo de travessia. O trabalho de Opsahl e Skvoretz \cite{opsahl2010node} é definido em redes onde os pesos representam força 
-dos laços, então os autores sugerem que os pesos devem ser invertidos. Além disso, o objetivo do trabalho é considerar também 
-o número de nós intermediários, então os autores propõem novamente o uso de um parâmetro de ajuste, $\alpha$, que controla o quão 
-importante considera-se o número de nodos intermediários e a força das conexões.
+O conceito de distância (discutido na Seção~\ref{sect:analysis} e ilustrado na Equação~\ref{eqn:distance}), aplicado à rede de colaborações, significa que a distância entre os pesquisadores levará em consideração o nível de confiança das conexões bem como o número de pesquisadores intermediários. Para $\alpha < 1$, caminhos com maior número de intermediários são considerados mais distantes, enquanto $\alpha > 1$ vai considerar mais importante a força das relações de confiança, atribuindo menores distâncias para caminhos onde há fortes relações de confiança entre os pesquisadores, podendo estes ter mais intermediários \cite{opsahl2010node}. Na Tabela~\ref{tab:distances} são apresentadas as distâncias calculadas entre os pesquisadores A e B, conforme a rede exemplificada na Figura~\ref{fig:network}. As recomendações seriam ordenadas da menor para a maior distância.
 
-\begin{equation} \label{eqn:distance}
-  d^{w\alpha}(i, j) = min \left( \frac{1}{ \left( w_{ih}^{\alpha} \right) } + \dots + \frac{1}{ \left( w_{hj}^{\alpha} \right) }  \right) 
-\end{equation}
 
-Esse conceito, aplicado à rede de colaborações, significa que a distância entre os pesquisadores levará em consideração o nível 
-de confiança das conexões bem como o número de pesquisadores intermediários. Para $\alpha < 1$, caminhos com maior número de 
-intermediários são considerados mais distantes, enquanto $\alpha > 1$ vai considerar mais importante a força das relações de 
-confiança, atribuindo menores distâncias para caminhos onde há fortes relações de confiança entre os pesquisadores, podendo estes 
-ter mais intermediários \cite{opsahl2010node}. Na tabela \ref{tab:distances} são apresentadas as distâncias calculadas entre os 
-pesquisadores A e B, conforme a rede exemplificada na figura \ref{fig:network}. As recomendações seriam ordenadas da menor para a 
-maior distância.
-
-\begin{center}
   \begin{table}[ht]
     \caption{Distâncias}
     \label{tab:distances}
@@ -442,16 +412,12 @@ maior distância.
       \multicolumn{1}{|l|}{\{A, D, E, B\}}                                                       & 3.00                        & 1.72                        & 0.47                        & 0.19                        \\ \hline
     \end{tabular}
   \end{table}  
-\end{center}
+
 
 \subsection{Pré-seleção de Recomendações} \label{sect:pre-selection}
 
-Com as métricas de confiança aqui propostas, é possível estabelecer níveis de confiança da comunidade, uma rede subjetiva do 
-pesquisador alvo ou distâncias ponderadas por confiança e usar as predições para oferecer sugestões de colaboradores para cada 
-membro da rede em diferentes contextos. Todavia confiança apenas pode não ser suficiente para recomendações de qualidade. 
-Considerar também a linha de pesquisa do pesquisador no momento e os perfis dos potenciais colaboradores pode aumentar a qualidade 
-das recomendações: mesmo que a confiança em um pesquisador seja alta, a sugestão de colaboração pode não fazer sentido caso as 
-linhas de pesquisa não se encaixem.
+Com as métricas de confiança aqui propostas, é possível estabelecer níveis de confiança da comunidade, uma rede subjetiva do pesquisador alvo ou distâncias ponderadas por confiança e usar as predições para oferecer sugestões de colaboradores para cada membro da rede em diferentes contextos. Todavia confiança apenas pode não ser suficiente para recomendações de qualidade. 
+Considerar também a linha de pesquisa do pesquisador no momento e os perfis dos potenciais colaboradores pode aumentar a qualidade das recomendações: mesmo que a confiança em um pesquisador seja alta, a sugestão de colaboração pode não fazer sentido caso as linhas de pesquisa não se encaixem.
 
 Para aprimorar as recomendações, é proposta uma pré-seleção dos itens utilizando um método baseado em conteúdo. A 
 técnica consiste no cálculo de correspondência de palavras chave em um modelo de espaço vetorial (MEV), visto que 
@@ -463,7 +429,7 @@ pesquisador $j$. Pode-se pensar em uma matriz na qual as linhas são pesquisador
 termos-chave extraídos do universo das publicações (\textit{corpus}), removendo palavras vazias - “ou”, “de”, “para” \dots - 
 tanto em português quanto em inglês.
 
-Tal matriz é construída através da técnica de vetorização \textit{TF-IDF}, na qual considera-se termos importantes aqueles que 
+Tal matriz é construída por meio da técnica de vetorização \textit{TF-IDF}, na qual considera-se termos importantes aqueles que 
 aparecem com frequência relacionados á um item específico e com menor frequência nos outros itens do \textit{corpus} 
 \cite{pazzani2007content}. A partir disso é preciso computar a semelhança entre termos. Para tal, a proposta é o uso da 
 similaridade de cossenos por ser a técnica mais comumente aplicada \cite{ricci2011introduction}. Para a pré-seleção dos itens, a 
@@ -472,23 +438,22 @@ desta, pode-se calcular as similaridades dos perfis dos autores cadastrados com 
 
 \subsection{Arquitetura} \label{sect:arch}
 
-Até aqui foram descritas técnicas que podem ser usadas para a computação de confiança entre membros de uma comunidade, resultando 
+Até este ponto do texto foram descritas técnicas que podem ser usadas para a computação de confiança entre membros de uma comunidade, resultando 
 em vetores de confiança global e local, bem como distâncias ponderadas por confiança. Também foi discutida a possibilidade de 
 aprimorar recomendações baseadas em confiança usando o conteúdo dos itens disponíveis. Agora, detalha-se a descrição geral de como é 
 possível combinar as metodologias descritas para obter um resultado. 
 
-Em \cite{massa2004trust} é sugerida uma arquitetura de SR combinando filtragem colaborativa e método baseado em confiança. 
-O sistema é descrito em módulos substituíveis e portanto pode ser usado para combinar os métodos baseado em conteúdo e em 
-confiança. Basicamente, conforme apresentado na Figura \ref{fig:sr-arch}, a saída do método usado para pré-seleção é usada 
+Em \cite{massa2004trust} é sugerida uma arquitetura de SR combinando filtragem colaborativa e método baseado em confiança. O sistema é descrito em módulos substituíveis e portanto pode ser usado para combinar os métodos baseado em conteúdo e em confiança. Basicamente, conforme apresentado na Figura \ref{fig:sr-arch}, a saída do método usado para pré-seleção é usada 
 para filtrar e ordenar as recomendações a partir das confianças computadas.
 
-\begin{center}
+
  \begin{figure}[ht]
-   \includegraphics[width=1\textwidth]{SR-arch.png}
-   \caption{Arquitetura do Sistema de Recomendação proposto}
+    \centering
+   \includegraphics[width=.9\textwidth]{SR-arch.png}
+   \caption{Arquitetura do Sistema de Recomendação proposto.}
    \label{fig:sr-arch}
  \end{figure}
-\end{center}
+
 
 É preciso então definir um método para oferecer ao usuário uma amostra seleta com os pesquisadores mais relevantes seguindo as métricas de confiança (filtragem por confiança) a partir de uma lista de itens ordenada por similaridade de cossenos e vetores de 
 confiança estimada. Neste ponto, é possível usar alguma técnica para combinar as métricas de confiança, porém é importante 
@@ -497,17 +462,31 @@ pode-se usar um ou outro ou combinações. Após a pré-seleção, o custo compu
 diminui consideravelmente pois é preciso apenas computar distâncias entre o pesquisador alvo e uma amostra pequena de 
 pesquisadores com o perfil compatível com a \textit{query}.
 
-Portanto, uma vez aplicado o método por conteúdo, pode-se é aplicar a métrica de distâncias ponderadas por confiança em uma 
+Portanto, uma vez aplicado o método por conteúdo, pode-se  aplicar a métrica de distâncias ponderadas por confiança em uma 
 amostra reduzida da rede, visto que a métrica em questão em teoria é mais indicada para promover colaboração entre os membros da 
 rede.
 
+\subsubsection{Tecnologias}
+
+\begin{itemize}
+    \item ARQUIVOS .CSV
+    \item LINGUAGEM
+    \item FRAMEWORK
+    \item BANCO...
+    \item pandas
+    \item scikit-learn
+    \item numpy
+    \item COMPUTAÇÃO EM NUVEM - QUAL SERVIÇO
+    \item DESCRIÇÃO DA BASE DE DADOS (LINHAS, ARTIGOS, PESQUISADORES)
+\end{itemize}
+
+Os dados foram exportados através de uma consulta ao banco de dados da plataforma Kennis, resultando em um arquivo \textit{csv - comma separated value} com 16793 linhas, cada uma representando uma publicação cadastrada por seu autor. Contém 169 autores e 15821 títulos de obra distintos. É importante notar que os títulos distintos não representam publicações distintas, é possível que dois pesquisadores cadastrem a mesma publicação com leves variações no título (erros de caligrafia, supressão de artigos, distinções de acentuação e de letras maiúsculas ou minúsculas), o que pode causar com que a mesma publicação não seja reconhecida comparando seus títulos diretamente. Por isso, se faz necessário agrupar as publicações em comum cadastradas por pesquisadores distintos.
+
+A biblioteca pandas foi utilizada para facilitar a descoberta de conhecimento em bancos de dados, oferecendo objetos que podem encapsular uma base de dados e facilitar sua manipulação. Aliado com a biblioteca scikit-learn, que implementa diversos algoritmos comumente usados na mineração de dados e computação científica, tais como vetorização TF-IDF e o algoritmo de clusterização MeanShift \cite{scikit-learn}. Também foi utilizada a biblioteca numpy para computação numérica, que possibilita a manipulação dos dados discutidos no artigo.
+
 \subsection{Validação} \label{sect:validation}
 
-Várias métricas são sugeridas para medir a performance de um SR quando a tarefa do sistema gira em torno de predizer avaliações, 
-é possível realizar predições e calcular o erro diretamente, de maneira supervisionada. \cite{shani2011evaluating} sugerem 
-que é importante considerar o contexto da aplicação de cada SR, pois como os objetivos de diferentes sistemas variam, é 
-natural que variem também as métricas de validação. É preciso então avaliar cada caso e estabelecer quais as propriedades que 
-influenciam o sucesso do SR.
+Várias métricas são sugeridas para medir a \textit{performance} de um Sistema de Recomendação (SR). Quando a tarefa do sistema gira em torno de predizer avaliações, é possível realizar predições e calcular o erro diretamente, de maneira supervisionada. Em \cite{shani2011evaluating}, os autores sugerem que é importante considerar o contexto da aplicação de cada SR, pois como os objetivos de diferentes sistemas variam, é natural que variem também as métricas de validação. É preciso então avaliar cada caso e estabelecer quais as propriedades que influenciam o sucesso do SR.
 
 Considerando que o principal fator de sucesso do SR aqui proposto é a promoção da colaboração entre os pesquisadores da rede de 
 publicações, a métrica mais completa para a validação do sistema é subjetiva ao usuário: 
@@ -525,9 +504,7 @@ recomendações para uma amostra seleta de pesquisadores e recolher seus \textit
 No contexto da implementação proposta neste artigo, somente é possível a segunda opção. Portanto foi elaborado um questionário 
 em dois momentos. A proposta é primeiramente perguntar a um grupo de pesquisadores qual a linha de pesquisa estão desenvolvendo, 
 nas seguintes palavras: \textit{“No que você está trabalhando no momento?”} - A resposta para tal pergunta será usada como a 
-\textit{query}, conforme ilustrado na figura \ref{fig:sr-arch}. A partir disso serão elaboradas as recomendações conforme a seção 
-\ref{sect:arch}. A validação virá no segundo momento do questionário, no qual os pesquisadores serão apresentados às sugestões 
-elaboradas e indagados sobre sua qualidade. É considerado que três perguntas são suficientes para a avaliação:
+\textit{query}, conforme ilustrado na Figura~\ref{fig:sr-arch}. A partir disso serão elaboradas as recomendações conforme a Seção~\ref{sect:arch}. A validação virá no segundo momento do questionário, no qual os pesquisadores serão apresentados às sugestões elaboradas e indagados sobre sua qualidade. É considerado que três perguntas são suficientes para a avaliação:
 
 \begin{itemize}
   \item \textit{“Você acha relevante a colaboração com este pesquisador?”}
@@ -536,29 +513,51 @@ elaboradas e indagados sobre sua qualidade. É considerado que três perguntas s
   \end{itemize}
   \item \textit{“Em uma escala de um a dez, o quão fácil você considera realizar uma colaboração com este pesquisador?”}
   \begin{itemize}
-    \item Resposta: Valor no interválo [1, 10], 1 representa facilidade mínima e 10 representa máxima facilidade
+    \item Resposta: Valor no intervalo [1, 10], 1 representa facilidade mínima e 10 representa máxima facilidade
   \end{itemize}
   \item \textit{“Em uma escala de um a dez, qual o seu nível de confiança nesse pesquisador?”}
   \begin{itemize}
-    \item Resposta: Valor no interválo [1, 10], 1 representa confiança mínima e 10 representa confiança total.  
+    \item Resposta: Valor no intervalo [1, 10], 1 representa confiança mínima e 10 representa confiança total.  
   \end{itemize}
 \end{itemize}
 
-\section{Discussão \& Conclusão}
+\section{Resultados}
 
-Aqui foi apresentado o conceito, no campo de sistemas de recomendação, de promover a colaboração entre membros de uma comunidade 
-de pesquisadores. Foi introduzido o conceito de Sistema de Recomendação, as técnicas mais utilizadas e uma tendência mais recente, 
-de recomendações baseadas em confiança. Sugeriu-se um modelo de rede de confiança na qual pesquisadores são conectados por  
-publicações em conjunto, considerado um voto de confiança. Foram discutidas três métricas de propagação e agregação de confiança 
-na rede, usando conceitos do algoritmo PageRank \cite{page1999pagerank} e de métricas de centralidade e distância entre nodos em grafos 
-não-direcionados ponderados \cite{opsahl2010node}.
+Para a base de dados da plataforma Kennis, foram feitos testes com o parâmetro \textit{bandwidth} variando de $0.3$ até $1.0$, fazendo a comparação dos resultados
 
-A partir de então, foi proposta a recomendação através da pré-seleção de perfis baseada em conteúdo seguida de filtragem dos perfis 
+AS IMAGENS
+
+\section{Análise e Discussão dos Resultados}
+
+TRECHO DE ALGUM CÓDIGO E O RESULTADO GERADO.....
+
+TABELAS DE RESULTADOS....
+ 
+Ações ou tarefas realizadas para "limpeza" ou processamento da base fornecida pela plataforma Kenis:
+\begin{itemize}
+    \item clusterização dos títulos, pois não havia um identificador dos artigos. Com essa clusterização foi possível agrupar por título os artigos;
+    \item na geração da matriz TFIDF (), foi preciso gerar a tabela com todos os termos que apareciam nos títulos dos artigos, entretanto, foi necessário excluir as palavras ou expressões como artigos, preposições (palavras vazias). Essa matriz tinha as 17 mil linhas da base original, mas 20 mil colunas, referentes aos termos dos títulos. O valor da linha coluna era a importância do termo para o artigo.
+\end{itemize}{}
+
+Alguns detalhes de implementação e processamento da base:
+
+\begin{itemize}
+    \item o tempo de processamento para a clusterização foi em média de 10 horas, e varia de acordo com o parâmetro bandwidth do algoritmo MINSHIFT;
+    \item no serviço de processamento em nuvem utilizado, era fornecido 35 threads/núcleos, mas devido à memória, somente 7 núcleos;
+    \item o porquê de não ter sido processado localmente
+\end{itemize}{}
+
+\section{Considerações Finais}
+
+Neste trabalho buscou-se apresentar sistemas de recomendação e promover a colaboração entre membros de uma comunidade de pesquisadores. Foram discutidos conceito de Sistema de Recomendação, as técnicas mais utilizadas e uma tendência mais recente de recomendações baseadas em confiança. Sugeriu-se um modelo de rede de confiança na qual pesquisadores são conectados por publicações em conjunto, considerado um voto de confiança. Também foram discutidas três métricas de propagação e agregação de confiança  na rede, usando conceitos do algoritmo PageRank \cite{page1999pagerank} e de métricas de centralidade e distância entre nodos em grafos  não-direcionados ponderados \cite{opsahl2010node}.
+
+A partir disso, foi proposta a recomendação por meio da pré-seleção de perfis baseada em conteúdo seguida de filtragem dos perfis 
 via distância ponderada por confiança, seguindo a arquitetura proposta por Massa e Avesani \cite{massa2004trust} para um SR híbrido 
-utilizando o método baseado em conteúdo. Para a avaliação do modelo, foi apresentado o fator de sucesso que justifica a validação 
-através de questionários respondidos pelo usuário mediante sugestões elaboradas pelo SR.
+utilizando o método baseado em conteúdo. 
 
-É possível estender o trabalho aqui proposto pensando em melhores heurísticas para a relevância das publicações, considerando por 
+Para a avaliação do modelo, foi apresentado o fator de sucesso que justifica a validação por meio de questionários respondidos pelo usuário mediante sugestões elaboradas pelo SR.
+
+É possível estender o trabalho proposto pensando em melhores heurísticas para a relevância das publicações, considerando por 
 exemplo a data de publicação, com diferentes pesos para diferentes épocas. É possível também incorporar mais métodos discutidos 
 na seção \ref{sect:computing-trust} para melhorar as recomendações, levando em consideração por exemplo métricas locais e globais, 
 além das distâncias.
